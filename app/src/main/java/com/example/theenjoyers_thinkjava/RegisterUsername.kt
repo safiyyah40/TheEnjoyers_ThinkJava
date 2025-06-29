@@ -2,7 +2,10 @@ package com.example.theenjoyers_thinkjava
 
 import android.content.Intent
 import android.os.Bundle
+<<<<<<< HEAD
 import android.util.Patterns
+=======
+>>>>>>> 1e8331fdebe9e4ccb2419d12ae6b2c2700e3084a
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -13,11 +16,14 @@ import androidx.core.view.WindowInsetsCompat
 
 class RegisterUsername : AppCompatActivity() {
 
+<<<<<<< HEAD
     private lateinit var usernameField: EditText
     private lateinit var emailField: EditText
     private lateinit var nextButton: Button
     private lateinit var cancelButton: Button
 
+=======
+>>>>>>> 1e8331fdebe9e4ccb2419d12ae6b2c2700e3084a
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -29,6 +35,7 @@ class RegisterUsername : AppCompatActivity() {
             insets
         }
 
+<<<<<<< HEAD
         // Inisialisasi View
         usernameField = findViewById(R.id.editTextText)
         emailField = findViewById(R.id.editTextText1)
@@ -70,4 +77,37 @@ class RegisterUsername : AppCompatActivity() {
         intent.putExtra("email", email)
         startActivity(intent)
     }
+=======
+        val usernameField = findViewById<EditText>(R.id.editTextText)
+        val emailField = findViewById<EditText>(R.id.editTextText1)
+        val nextButton = findViewById<Button>(R.id.button6)
+        val cancelButton = findViewById<Button>(R.id.button7)
+
+        cancelButton.setOnClickListener {
+            // Fungsi tombol batal: kembali ke layar sebelumnya
+            finish()
+        }
+
+        nextButton.setOnClickListener {
+            val username = usernameField.text.toString().trim()
+            val email = emailField.text.toString().trim()
+
+            if (username.isEmpty()) {
+                Toast.makeText(this, "Nama pengguna tidak boleh kosong", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (email.isEmpty()) {
+                Toast.makeText(this, "Email tidak boleh kosong", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Kirim data username dan email ke RegisterPassword
+            val intent = Intent(this, RegisterPassword::class.java)
+            intent.putExtra("username", username)
+            intent.putExtra("email", email)
+            startActivity(intent)
+        }
+    }
+>>>>>>> 1e8331fdebe9e4ccb2419d12ae6b2c2700e3084a
 }

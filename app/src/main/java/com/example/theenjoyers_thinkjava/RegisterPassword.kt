@@ -2,11 +2,16 @@ package com.example.theenjoyers_thinkjava
 
 import android.content.Intent
 import android.os.Bundle
+<<<<<<< HEAD
 import android.text.InputType
 import android.util.Patterns
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+=======
+import android.widget.Button
+import android.widget.EditText
+>>>>>>> 1e8331fdebe9e4ccb2419d12ae6b2c2700e3084a
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +25,7 @@ class RegisterPassword : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
 
+<<<<<<< HEAD
     private lateinit var passwordField: EditText
     private lateinit var toggleButton: ImageButton
     private lateinit var submitButton: Button
@@ -29,6 +35,8 @@ class RegisterPassword : AppCompatActivity() {
     private var username: String? = null
     private var isPasswordVisible = false
 
+=======
+>>>>>>> 1e8331fdebe9e4ccb2419d12ae6b2c2700e3084a
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -43,6 +51,7 @@ class RegisterPassword : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
 
+<<<<<<< HEAD
         email = intent.getStringExtra("email")
         username = intent.getStringExtra("username")
 
@@ -52,10 +61,20 @@ class RegisterPassword : AppCompatActivity() {
         backButton = findViewById(R.id.button8)
 
         // Tombol kembali
+=======
+        val email = intent.getStringExtra("email")
+        val username = intent.getStringExtra("username")
+
+        val passwordField = findViewById<EditText>(R.id.editTextText4)
+        val submitButton = findViewById<Button>(R.id.button5)
+        val backButton = findViewById<Button>(R.id.button8)
+
+>>>>>>> 1e8331fdebe9e4ccb2419d12ae6b2c2700e3084a
         backButton.setOnClickListener {
             finish()
         }
 
+<<<<<<< HEAD
         // Tombol Submit
         submitButton.setOnClickListener {
             handleRegister()
@@ -103,6 +122,41 @@ class RegisterPassword : AppCompatActivity() {
 
         // Buat akun
         createAccount(email!!, password, username!!)
+=======
+        submitButton.setOnClickListener {
+            val password = passwordField.text.toString().trim()
+
+            if (password.isEmpty()) {
+                Toast.makeText(this, "Password tidak boleh kosong", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (email.isNullOrEmpty() || username.isNullOrEmpty()) {
+                Toast.makeText(this, "Data email atau username tidak ditemukan", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Cek apakah email sudah terdaftar
+            auth.fetchSignInMethodsForEmail(email).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val signInMethods = task.result?.signInMethods
+                    if (signInMethods.isNullOrEmpty()) {
+                        // Email belum terdaftar, lanjut buat akun
+                        createAccount(email, password, username)
+                        startActivity(Intent(this, Login::class.java))
+                        finish()
+                    } else {
+                        // Email sudah terdaftar
+                        Toast.makeText(this, "Email sudah terdaftar, silakan login.", Toast.LENGTH_LONG).show()
+                        startActivity(Intent(this, Login::class.java))
+                        finish()
+                    }
+                } else {
+                    Toast.makeText(this, "Gagal mengecek email: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+>>>>>>> 1e8331fdebe9e4ccb2419d12ae6b2c2700e3084a
     }
 
     private fun createAccount(email: String, password: String, username: String) {
@@ -116,15 +170,24 @@ class RegisterPassword : AppCompatActivity() {
                             "email" to email,
                             "username" to username
                         )
+<<<<<<< HEAD
 
                         firestore.collection("users").document(userId)
                             .set(userMap)
                             .addOnSuccessListener {
                                 Toast.makeText(this, "Registrasi berhasil!", Toast.LENGTH_SHORT).show()
+=======
+                        firestore.collection("users").document(userId)
+                            .set(userMap)
+                            .addOnSuccessListener {
+                                Toast.makeText(this, "Akun berhasil dibuat!", Toast.LENGTH_SHORT).show()
+                                // BARIS INI AKAN DIJALANKAN HANYA JIKA PENYIMPANAN KE FIRESTORE SUKSES
+>>>>>>> 1e8331fdebe9e4ccb2419d12ae6b2c2700e3084a
                                 startActivity(Intent(this, Login::class.java))
                                 finish()
                             }
                             .addOnFailureListener { e ->
+<<<<<<< HEAD
                                 Toast.makeText(this, "Gagal menyimpan user data: ${e.message}", Toast.LENGTH_LONG).show()
                             }
                     } else {
@@ -143,3 +206,19 @@ class RegisterPassword : AppCompatActivity() {
             }
     }
 }
+=======
+                                // JIKA MASUK KE SINI, BERARTI ADA ERROR SAAT MENYIMPAN KE FIRESTORE
+                                // PERHATIKAN PESAN INI: ${e.message}
+                                Toast.makeText(this, "Gagal menyimpan data: ${e.message}", Toast.LENGTH_LONG).show()
+                            }
+                    } else {
+                        Toast.makeText(this, "User ID tidak ditemukan setelah pendaftaran.", Toast.LENGTH_LONG).show()
+                    }
+                } else {
+                    // Ini adalah error saat membuat akun di Firebase Authentication
+                    Toast.makeText(this, "Gagal mendaftar: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                }
+            }
+    }
+}
+>>>>>>> 1e8331fdebe9e4ccb2419d12ae6b2c2700e3084a

@@ -2,7 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+<<<<<<< HEAD
     <!-- Internet permission wajib untuk koneksi ke Firebase -->
+=======
+>>>>>>> 1e8331fdebe9e4ccb2419d12ae6b2c2700e3084a
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -15,13 +18,32 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TheEnjoyers_ThinkJava"
         tools:targetApi="31">
+<<<<<<< HEAD
 
         <!-- Splash / Launcher -->
+=======
+        <activity
+            android:name=".Profile"
+            android:exported="false" />
+        <activity
+            android:name=".Leaderboard"
+            android:exported="false" />
+        <activity
+            android:name=".ButtomNavBar"
+            android:exported="false" />
+        <activity
+            android:name=".Login"
+            android:exported="false" />
+        <activity
+            android:name=".RegisterPassword"
+            android:exported="false" /> <!-- Splash screen / logo -->
+>>>>>>> 1e8331fdebe9e4ccb2419d12ae6b2c2700e3084a
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+<<<<<<< HEAD
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -51,3 +73,21 @@
     </application>
 
 </manifest>
+=======
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity> <!-- Halaman beranda setelah splash -->
+        <activity
+            android:name=".HomeGuest"
+            android:exported="false" /> <!-- Halaman daftar akun -->
+        <activity
+            android:name=".RegisterUsername"
+            android:exported="false" />
+        <activity
+            android:name=".Dashboard"
+            android:exported="false" />
+    </application>
+
+</manifest>
+>>>>>>> 1e8331fdebe9e4ccb2419d12ae6b2c2700e3084a
