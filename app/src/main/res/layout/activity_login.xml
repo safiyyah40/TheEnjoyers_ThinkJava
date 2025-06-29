@@ -7,22 +7,21 @@
     android:layout_height="match_parent"
     android:background="#00999F"
     tools:context=".Login">
-<<<<<<< HEAD
 
-=======
->>>>>>> 1e8331fdebe9e4ccb2419d12ae6b2c2700e3084a
+    <!-- Background Image -->
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:contentDescription="@string/desc_rectangle"
         android:scaleType="fitXY"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/rectangle" />
 
+    <!-- Scrollable Content -->
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -34,14 +33,9 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-<<<<<<< HEAD
             android:layout_height="wrap_content">
 
-=======
-            android:layout_height="wrap_content"> <!-- Tinggi wrap_content agar bisa di-scroll -->
-
-            <!-- KONTEN -->
->>>>>>> 1e8331fdebe9e4ccb2419d12ae6b2c2700e3084a
+            <!-- Header Text -->
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
@@ -51,14 +45,11 @@
                 android:textColor="#000000"
                 android:textSize="22sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-<<<<<<< HEAD
-=======
-                app:layout_constraintHorizontal_bias="0.495"
->>>>>>> 1e8331fdebe9e4ccb2419d12ae6b2c2700e3084a
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent" />
 
+            <!-- Sub Text -->
             <TextView
                 android:id="@+id/textView4"
                 android:layout_width="0dp"
@@ -70,14 +61,11 @@
                 android:textAlignment="center"
                 android:textColor="#000000"
                 android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-<<<<<<< HEAD
-=======
-                app:layout_constraintHorizontal_bias="0.0"
->>>>>>> 1e8331fdebe9e4ccb2419d12ae6b2c2700e3084a
+                app:layout_constraintTop_toBottomOf="@id/textView3"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textView3" />
+                app:layout_constraintEnd_toEndOf="parent" />
 
+            <!-- Email Field -->
             <EditText
                 android:id="@+id/editTextText2"
                 android:layout_width="0dp"
@@ -86,37 +74,27 @@
                 android:layout_marginTop="40dp"
                 android:layout_marginEnd="32dp"
                 android:background="@drawable/rounded_edittext"
-<<<<<<< HEAD
                 android:hint="Username"
-=======
-                android:hint="Email"
->>>>>>> 1e8331fdebe9e4ccb2419d12ae6b2c2700e3084a
                 android:padding="16dp"
                 android:textColorHint="#000000"
                 android:textColor="#000000"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textView4"
                 android:autofillHints="emailAddress"
-                android:inputType="textEmailAddress" />
+                android:inputType="textEmailAddress"
+                app:layout_constraintTop_toBottomOf="@id/textView4"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
-<<<<<<< HEAD
-            <!-- FrameLayout untuk Password + Eye Button -->
+            <!-- Password Field dengan Eye Button -->
             <FrameLayout
                 android:id="@+id/frameLayoutPassword"
-=======
-            <EditText
-                android:id="@+id/editTextText3"
->>>>>>> 1e8331fdebe9e4ccb2419d12ae6b2c2700e3084a
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="32dp"
-<<<<<<< HEAD
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/editTextText2"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/editTextText2">
+                app:layout_constraintEnd_toEndOf="parent">
 
                 <EditText
                     android:id="@+id/editTextText3"
@@ -124,8 +102,8 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/rounded_edittext"
                     android:hint="Kata Sandi"
-                    android:paddingEnd="48dp"
                     android:padding="16dp"
+                    android:paddingEnd="48dp"
                     android:textColorHint="#000000"
                     android:textColor="#000000"
                     android:autofillHints="password"
@@ -143,20 +121,7 @@
 
             </FrameLayout>
 
-            <!-- Button Lupa Kata Sandi -->
-=======
-                android:background="@drawable/rounded_edittext"
-                android:hint="Kata Sandi"
-                android:padding="16dp"
-                android:textColorHint="#000000"
-                android:textColor="#000000"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/editTextText2"
-                android:autofillHints="password"
-                android:inputType="textPassword" />
-
->>>>>>> 1e8331fdebe9e4ccb2419d12ae6b2c2700e3084a
+            <!-- Lupa Kata Sandi -->
             <Button
                 android:id="@+id/button9"
                 style="@style/Widget.AppCompat.Button.Borderless"
@@ -166,15 +131,10 @@
                 android:layout_marginEnd="32dp"
                 android:text="Lupa kata sandi?"
                 android:textColor="#FF6315"
-                app:layout_constraintEnd_toEndOf="parent"
-<<<<<<< HEAD
-                app:layout_constraintTop_toBottomOf="@id/frameLayoutPassword" />
+                app:layout_constraintTop_toBottomOf="@id/frameLayoutPassword"
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <!-- Button Selanjutnya -->
-=======
-                app:layout_constraintTop_toBottomOf="@id/editTextText3" />
-
->>>>>>> 1e8331fdebe9e4ccb2419d12ae6b2c2700e3084a
             <Button
                 android:id="@+id/button3"
                 android:layout_width="0dp"
@@ -185,49 +145,29 @@
                 android:backgroundTint="#FF6315"
                 android:padding="14dp"
                 android:text="Selanjutnya"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/button9"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/button9" />
+                app:layout_constraintEnd_toEndOf="parent" />
 
-<<<<<<< HEAD
             <!-- Button Kembali -->
-=======
->>>>>>> 1e8331fdebe9e4ccb2419d12ae6b2c2700e3084a
             <Button
                 android:id="@+id/button4"
                 android:layout_width="0dp"
                 android:layout_height="58dp"
                 android:layout_marginStart="32dp"
-<<<<<<< HEAD
-                android:layout_marginTop="5dp"
-=======
                 android:layout_marginTop="20dp"
->>>>>>> 1e8331fdebe9e4ccb2419d12ae6b2c2700e3084a
                 android:layout_marginEnd="32dp"
                 android:layout_marginBottom="32dp"
                 android:backgroundTint="#CED4DA"
                 android:padding="14dp"
                 android:text="Kembali"
                 android:textColor="#000000"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/button3"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-<<<<<<< HEAD
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/button3"
-                app:layout_constraintVertical_bias="0.041" />
+                app:layout_constraintBottom_toBottomOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-=======
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/button3"
-                app:layout_constraintVertical_bias="0.015" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
-</androidx.constraintlayout.widget.ConstraintLayout>
->>>>>>> 1e8331fdebe9e4ccb2419d12ae6b2c2700e3084a
