@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_dashboard"
+        android:title="Beranda"
+        android:icon="@drawable/icon_dashboard"/>
+
+    <item
+        android:id="@+id/menu_leaderboard"
+        android:title="Peringkat"
+        android:icon="@drawable/icon_leaderboard"/>
+
+    <item
+        android:id="@+id/menu_profile"
+        android:title="Profil"
+        android:icon="@drawable/icon_profile"/>
+
+</menu>

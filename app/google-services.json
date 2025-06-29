@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "36776738980",
+    "project_id": "thinkjava-fcab5",
+    "storage_bucket": "thinkjava-fcab5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:36776738980:android:07a10c01f42811013be631",
+        "android_client_info": {
+          "package_name": "com.example.theenjoyers_thinkjava"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_ydPC-Td-WqXJaSQOePw6KC88klEig7o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:padding="16dp"
+    android:background="#00999F">
+
+    <!-- Judul -->
+    <TextView
+        android:id="@+id/textViewTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Verifikasi OTP"
+        android:textSize="20sp"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- Deskripsi -->
+    <TextView
+        android:id="@+id/textViewDesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Masukkan 4 digit kode OTP yang dikirim ke email kamu"
+        android:textSize="14sp"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="24dp"/>
+
+    <!-- OTP Input -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
+
+        <EditText
+            android:id="@+id/otp_digit_1"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/otp_box"
+            android:gravity="center"
+            android:maxLength="1"
+            android:inputType="number"
+            android:hint="1"
+            android:importantForAccessibility="yes" />
+
+        <EditText
+            android:id="@+id/otp_digit_2"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/otp_box"
+            android:gravity="center"
+            android:maxLength="1"
+            android:inputType="number"
+            android:hint="2"
+            android:importantForAccessibility="yes" />
+
+        <EditText
+            android:id="@+id/otp_digit_3"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/otp_box"
+            android:gravity="center"
+            android:maxLength="1"
+            android:inputType="number"
+            android:hint="3"
+            android:importantForAccessibility="yes" />
+
+        <EditText
+            android:id="@+id/otp_digit_4"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:background="@drawable/otp_box"
+            android:gravity="center"
+            android:maxLength="1"
+            android:inputType="number"
+            android:hint="4"
+            android:importantForAccessibility="yes" />
+    </LinearLayout>
+
+    <!-- Tombol -->
+    <Button
+        android:id="@+id/buttonNextOtp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Selanjutnya"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#FF6315"
+        android:importantForAccessibility="yes" />
+
+</LinearLayout>
