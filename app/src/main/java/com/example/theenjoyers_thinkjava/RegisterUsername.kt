@@ -42,7 +42,7 @@ class RegisterUsername : AppCompatActivity() {
         nextButton.setOnClickListener {
             handleNext()
         }
-    }
+    } //proses
 
     private fun handleNext() {
         val username = usernameField.text.toString().trim()
