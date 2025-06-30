@@ -2,6 +2,7 @@ package com.example.theenjoyers_thinkjava
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Patterns
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -25,28 +26,31 @@ class ForgotPasswordActivity : AppCompatActivity() {
         buttonNext.setOnClickListener {
             val email = emailEditText.text.toString().trim()
 
+            // Validasi Email
             if (email.isEmpty()) {
                 Toast.makeText(this, "Masukkan email terlebih dahulu", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            // Cek email di Firebase
-            auth.fetchSignInMethodsForEmail(email)
+            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                Toast.makeText(this, "Format email tidak valid", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Kirim Link Reset Password ke Email
+            auth.sendPasswordResetEmail(email)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        val signInMethods = task.result?.signInMethods
-                        if (!signInMethods.isNullOrEmpty()) {
-                            // Email terdaftar
-                            Toast.makeText(this, "Email ditemukan! Lanjut ke OTP.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Link reset password sudah dikirim ke email", Toast.LENGTH_LONG).show()
 
-                            val intent = Intent(this, OtpVerificationActivity::class.java)
-                            intent.putExtra("email", email)
-                            startActivity(intent)
-                        } else {
-                            Toast.makeText(this, "Email belum terdaftar di aplikasi.", Toast.LENGTH_SHORT).show()
-                        }
+                        // Lanjut ke halaman OTP
+                        val intent = Intent(this, OtpVerificationActivity::class.java)
+                        intent.putExtra("email", email)
+                        startActivity(intent)
+
                     } else {
-                        Toast.makeText(this, "Terjadi kesalahan: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                        val errorMessage = task.exception?.localizedMessage ?: "Terjadi kesalahan."
+                        Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
                     }
                 }
         }
