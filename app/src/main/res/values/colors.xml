@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
+    <color name="black">#000000</color>
     <color name="white">#FFFFFFFF</color>
+    <!-- Warna yang dibutuhkan untuk QuestionActivity -->
+    <color name="grey_button_background_d9">#D9D9D9</color>
+    <color name="selected_button_background">#98FFB2</color>
+    <color name="green_correct">#4CAF50</color>
+    <color name="red_incorrect">#F44336</color>
+    <color name="light_green_highlight">#D4EDDA</color>
 </resources>

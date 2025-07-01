@@ -1,0 +1,15 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="369"
+    android:viewportHeight="384"
+    android:tint="?attr/colorControlNormal">
+  <!--
+      android:tint="?attr/colorControlNormal"
+      membuat ikon bisa diwarnai langsung dari ImageView.
+      Untuk warna emas tetap, kita akan set di ImageView.
+  -->
+  <path
+      android:fillColor="@android:color/white"
+      android:pathData="M276.75,32.02C262.91,32.02 245.98,48 245.98,63.98H123.01C123.01,48 106.08,32.02 92.25,32.02H30.77V176.02C30.77,192 46.12,207.98 61.48,207.98H95.32C101.49,240 121.49,267.19 169.14,272.02V305.29C123.01,312.66 123.01,351.98 123.01,351.98H245.98C245.98,351.98 245.98,312.66 199.86,305.3V272.02C247.52,267.19 267.51,240 273.68,207.98H307.52C322.88,207.98 338.23,192 338.23,176.02V32.02H276.75ZM92.25,176.02H61.48V63.98H92.25V176.02ZM307.52,176.02H276.75V63.98H307.52V176.02Z"/>
+</vector>

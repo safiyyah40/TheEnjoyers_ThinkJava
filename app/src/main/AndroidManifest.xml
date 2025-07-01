@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
     <!-- Internet permission wajib untuk koneksi ke Firebase -->
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -15,41 +14,54 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TheEnjoyers_ThinkJava"
         tools:targetApi="31">
-
-        <!-- Splash / Launcher -->
+        <activity
+            android:name=".ScoreActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ReviewActivity"
+            android:exported="false" />
+        <activity
+            android:name=".QuestionActivity"
+            android:exported="false" /> <!-- Splash / Launcher -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!-- Login Page -->
-        <activity android:name=".Login" android:exported="true" />
-
-        <!-- Forgot Password -->
-        <activity android:name=".ForgotPasswordActivity" android:exported="true" />
-        <activity android:name=".ResetPasswordActivity" android:exported="true" />
-        <activity android:name=".OtpVerificationActivity" android:exported="true" />
-
-        <!-- Dashboard / Home -->
-        <activity android:name=".Dashboard" android:exported="true" />
-        <activity android:name=".HomeGuest" android:exported="true" />
-
-        <!-- Leaderboard -->
-        <activity android:name=".Leaderboard" android:exported="true" />
-
-        <!-- Profile -->
-        <activity android:name=".Profile" android:exported="true" />
-
-        <!-- Register -->
-        <activity android:name=".RegisterUsername" android:exported="true" />
-        <activity android:name=".RegisterPassword" android:exported="true" />
-
-        <!-- Bottom Navigation -->
-
+        </activity> <!-- Login Page -->
+        <activity
+            android:name=".Login"
+            android:exported="true" /> <!-- Forgot Password -->
+        <activity
+            android:name=".ForgotPasswordActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ResetPasswordActivity"
+            android:exported="true" />
+        <activity
+            android:name=".OtpVerificationActivity"
+            android:exported="true" /> <!-- Dashboard / Home -->
+        <activity
+            android:name=".Dashboard"
+            android:exported="true" />
+        <activity
+            android:name=".HomeGuest"
+            android:exported="true" /> <!-- Leaderboard -->
+        <activity
+            android:name=".Leaderboard"
+            android:exported="true" /> <!-- Profile -->
+        <activity
+            android:name=".Profile"
+            android:exported="true" /> <!-- Register -->
+        <activity
+            android:name=".RegisterUsername"
+            android:exported="true" />
+        <activity
+            android:name=".RegisterPassword"
+            android:exported="true" />
     </application>
 
 </manifest>

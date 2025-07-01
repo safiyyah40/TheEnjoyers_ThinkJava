@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#00838F"
+    tools:context=".QuestionActivity">
+    <View
+        android:id="@+id/main_background_card"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/background_card_top_corners"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_question_progress"
+        android:layout_marginTop="8dp" />
+
+    <TextView
+        android:id="@+id/tv_question_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="1 / 25" />
+
+    <TextView
+        android:id="@+id/tv_timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:drawablePadding="8dp"
+        android:gravity="center_vertical"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:drawableStartCompat="@drawable/ic_timer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="45:00" />
+
+    <LinearLayout
+        android:id="@+id/navigation_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="@id/main_background_card"
+        app:layout_constraintEnd_toEndOf="@id/main_background_card"
+        app:layout_constraintStart_toStartOf="@id/main_background_card">
+
+        <!-- Tombol Sebelumnya -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/prev_button"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:padding="14dp"
+            android:text="Sebelumnya"
+            app:cornerRadius="16dp"
+            app:icon="@drawable/arrow_back"
+            app:iconGravity="textStart"
+            app:strokeColor="#FF6F00"
+            android:textColor="#FF6F00"/>
+
+        <!-- Tombol Selanjutnya -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/next_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:backgroundTint="#FF6F00"
+            android:padding="14dp"
+            android:text="Selanjutnya"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            app:cornerRadius="16dp"
+            app:icon="@drawable/arrow_forward"
+            app:iconGravity="textEnd" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:paddingBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@id/navigation_layout"
+        app:layout_constraintEnd_toEndOf="@id/main_background_card"
+        app:layout_constraintStart_toStartOf="@id/main_background_card"
+        app:layout_constraintTop_toTopOf="@id/main_background_card">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="24dp">
+
+            <TextView
+                android:id="@+id/question_title_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Soal Array"
+                android:textColor="@android:color/black"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/question_number_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="No 1"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/question_title_text" />
+
+            <TextView
+                android:id="@+id/question_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:lineSpacingExtra="4dp"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/question_number_text"
+                tools:text="Manakah dari pernyataan berikut ini yang benar untuk deklarasi array satu dimensi?" />
+
+            <LinearLayout
+                android:id="@+id/options_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@id/question_text">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/option_a_button"
+                    style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#D9D9D9"
+                    android:padding="16dp"
+                    android:textAlignment="viewStart"
+                    android:textColor="@android:color/black"
+                    app:cornerRadius="16dp"
+                    tools:text="A. int array() = new int[5];" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/option_b_button"
+                    style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:backgroundTint="#D9D9D9"
+                    android:padding="16dp"
+                    android:textAlignment="viewStart"
+                    android:textColor="@android:color/black"
+                    app:cornerRadius="16dp"
+                    tools:text="B. array int[] = new int[5];" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/option_c_button"
+                    style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:backgroundTint="#D9D9D9"
+                    android:padding="16dp"
+                    android:textAlignment="viewStart"
+                    android:textColor="@android:color/black"
+                    app:cornerRadius="16dp"
+                    tools:text="C. int[] array = new int[5];" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/option_d_button"
+                    style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:backgroundTint="#D9D9D9"
+                    android:padding="16dp"
+                    android:textAlignment="viewStart"
+                    android:textColor="@android:color/black"
+                    app:cornerRadius="16dp"
+                    tools:text="D. int array = [5];" />
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

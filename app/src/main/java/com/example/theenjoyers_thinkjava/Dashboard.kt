@@ -12,6 +12,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class Dashboard : AppCompatActivity() {
 
+    // Definisikan konstanta untuk key agar tidak ada salah ketik
+    companion object {
+        const val EXTRA_CATEGORY = "EXTRA_CATEGORY"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
@@ -34,23 +39,39 @@ class Dashboard : AppCompatActivity() {
             textViewUsername.text = username
         } else {
             textViewUsername.text = "Guest"
-            Toast.makeText(this, "Nama pengguna tidak ditemukan.", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun setupQuizButtons() {
+        // Tombol untuk kuis "Variabel"
         findViewById<Button>(R.id.btnMulai).setOnClickListener {
-            Toast.makeText(this, "Membuka kuis Variabel Java...", Toast.LENGTH_SHORT).show()
+            startQuiz("Variabel")
         }
+        // Tombol untuk kuis "Inheritance"
         findViewById<Button>(R.id.btnMulai1).setOnClickListener {
-            Toast.makeText(this, "Membuka kuis Inheritance Java...", Toast.LENGTH_SHORT).show()
+            startQuiz("Inheritance")
         }
+        // Tombol untuk kuis "Array"
         findViewById<Button>(R.id.btnMulai2).setOnClickListener {
-            Toast.makeText(this, "Membuka kuis Array Java...", Toast.LENGTH_SHORT).show()
+            startQuiz("Array")
         }
+        // Tombol untuk kuis "Looping"
         findViewById<Button>(R.id.btnMulai3).setOnClickListener {
-            Toast.makeText(this, "Membuka kuis Looping Java...", Toast.LENGTH_SHORT).show()
+            startQuiz("Looping")
         }
+    }
+
+    // Fungsi bantuan untuk memulai kuis agar kode tidak berulang
+    private fun startQuiz(category: String) {
+        Toast.makeText(this, "Membuka kuis $category...", Toast.LENGTH_SHORT).show()
+
+        // Membuat Intent untuk pindah ke QuestionActivity
+        val intent = Intent(this, QuestionActivity::class.java).apply {
+            // Menambahkan data kategori ke dalam Intent
+            putExtra(EXTRA_CATEGORY, category)
+        }
+        // Memulai activity baru
+        startActivity(intent)
     }
 
     private fun setupBottomNavigation() {
@@ -59,15 +80,12 @@ class Dashboard : AppCompatActivity() {
 
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.menu_dashboard -> {
-                    true
-                }
+                R.id.menu_dashboard -> true
                 R.id.menu_leaderboard -> {
                     val intent = Intent(this, Leaderboard::class.java)
                     startActivity(intent)
                     @Suppress("DEPRECATION")
                     overridePendingTransition(0, 0)
-                    // Tutup Activity saat ini agar tidak menumpuk saat tombol back ditekan
                     finish()
                     true
                 }
