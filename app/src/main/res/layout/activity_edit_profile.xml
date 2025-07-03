@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/profile_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#00999F"
+    tools:context=".EditProfile">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:clipToPadding="false"
+        android:layout_marginBottom="90dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/profile_content_background">
+
+            <!-- Judul "Profil" -->
+            <TextView
+                android:id="@+id/title_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Profil"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- Foto Profil -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_avatar"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                app:cardCornerRadius="60dp"
+                app:cardElevation="4dp"
+                android:layout_marginTop="24dp"
+                app:layout_constraintTop_toBottomOf="@id/title_profile"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <ImageView
+                    android:id="@+id/image_avatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    tools:src="@tools:sample/avatars"
+                    android:contentDescription="Foto Profil" />
+            </androidx.cardview.widget.CardView>
+
+            <!-- Label Nama -->
+            <TextView
+                android:id="@+id/labelUsername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nama"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                android:layout_marginTop="32dp"
+                android:layout_marginStart="32dp"
+                app:layout_constraintTop_toBottomOf="@id/card_avatar"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <!-- Username -->
+            <EditText
+                android:id="@+id/editTextUsername"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="32dp"
+                android:background="@drawable/rounded_edittext"
+                android:inputType="textPersonName"
+                android:padding="16dp"
+                android:textColor="#000000"
+                android:textColorHint="#000000"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/labelUsername"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+            <!-- Label Email -->
+            <TextView
+                android:id="@+id/labelEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Email"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="32dp"
+                app:layout_constraintTop_toBottomOf="@id/editTextUsername"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <!-- Email -->
+            <EditText
+                android:id="@+id/editTextEmail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="32dp"
+                android:background="@drawable/rounded_edittext"
+                android:inputType="textEmailAddress"
+                android:padding="16dp"
+                android:textColor="#000000"
+                android:textColorHint="#000000"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/labelEmail"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+            <!-- Label Umur -->
+            <TextView
+                android:id="@+id/labelAge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Umur"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="32dp"
+                app:layout_constraintTop_toBottomOf="@id/editTextEmail"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <!-- Umur -->
+            <EditText
+                android:id="@+id/editTextAge"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="32dp"
+                android:background="@drawable/rounded_edittext"
+                android:inputType="number"
+                android:padding="16dp"
+                android:textColor="#000000"
+                android:textColorHint="#000000"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/labelAge"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+            <!-- Tombol Simpan -->
+            <Button
+                android:id="@+id/Simpan"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="32dp"
+                android:text="Simpan"
+                android:backgroundTint="#FF5722"
+                android:textColor="@android:color/white"
+                app:cornerRadius="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/editTextAge"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

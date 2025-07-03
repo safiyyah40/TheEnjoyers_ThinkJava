@@ -49,8 +49,9 @@ dependencies {
     implementation("androidx.gridlayout:gridlayout:1.0.0")
 
     // Firebase
-    implementation("com.google.firebase:firebase-auth:22.3.0")
+    implementation("com.google.firebase:firebase-auth:22.3.1")
     implementation("com.google.firebase:firebase-firestore:24.10.0")
+
 
 
     // AndroidX dan UI

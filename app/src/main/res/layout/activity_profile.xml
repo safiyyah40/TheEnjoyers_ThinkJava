@@ -14,15 +14,13 @@
         android:layout_height="match_parent"
         android:fillViewport="true"
         android:clipToPadding="false"
-        android:layout_marginBottom="90dp"> <!-- Margin agar tidak tertutup menu bawah -->
+        android:layout_marginBottom="90dp">
 
-        <!-- Wadah utama untuk konten profil dengan background putih melengkung -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/profile_content_background">
 
-            <!-- Judul "Profil" -->
             <TextView
                 android:id="@+id/title_profile"
                 android:layout_width="wrap_content"
@@ -36,7 +34,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
-            <!-- Foto Profil (Gunakan CardView agar bulat sempurna) -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_avatar"
                 android:layout_width="120dp"
@@ -57,7 +54,6 @@
                     android:contentDescription="Foto Profil" />
             </androidx.cardview.widget.CardView>
 
-            <!-- Nama Pengguna -->
             <TextView
                 android:id="@+id/text_username"
                 android:layout_width="wrap_content"
@@ -71,7 +67,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
-            <!-- Tombol Edit Profil -->
             <Button
                 android:id="@+id/btn_edit_profile"
                 android:layout_width="wrap_content"
@@ -87,49 +82,38 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
-            <!-- CardView pembungkus untuk Grid skor, dengan border abu-abu -->
+            <!-- CardView di tengah -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_grid_wrapper"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="24dp"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
                 app:strokeWidth="1dp"
                 app:strokeColor="#DDDDDD"
-                android:layout_marginTop="24dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
                 app:layout_constraintTop_toBottomOf="@id/btn_edit_profile"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
-                <!-- GridLayout untuk menata 4 kotak skor secara otomatis -->
                 <androidx.gridlayout.widget.GridLayout
                     android:id="@+id/grid_scores"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:columnCount="2"
                     app:rowCount="2"
                     app:useDefaultMargins="true"
                     android:padding="8dp">
 
-                    <!-- Kotak 1: Variable Java -->
                     <include layout="@layout/item_score_card" android:id="@+id/score_variable_layout" />
-
-                    <!-- Kotak 2: Inheritance Java -->
                     <include layout="@layout/item_score_card" android:id="@+id/score_inheritance_layout"/>
-
-                    <!-- Kotak 3: Looping Java -->
                     <include layout="@layout/item_score_card" android:id="@+id/score_looping_layout"/>
-
-                    <!-- Kotak 4: Array Java -->
                     <include layout="@layout/item_score_card" android:id="@+id/score_array_layout"/>
 
                 </androidx.gridlayout.widget.GridLayout>
             </androidx.cardview.widget.CardView>
 
-
-            <!-- Tombol Logout -->
             <Button
                 android:id="@+id/btn_logout"
                 android:layout_width="0dp"
@@ -146,9 +130,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
-
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </ScrollView>
 
     <RelativeLayout
@@ -157,14 +139,12 @@
         android:layout_gravity="bottom"
         android:clipChildren="false">
 
-        <!-- 2. BORDER BIRU (Bagian Luar) -->
         <View
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:layout_alignParentBottom="true"
             android:background="@drawable/bottom_nav_border_background" />
 
-        <!-- 3. KONTEN NAVIGASI (Bagian Dalam) -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -176,7 +156,6 @@
             app:cardCornerRadius="22dp"
             app:cardElevation="8dp">
 
-            <!-- BottomNavigationView -->
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/bottom_menu"
                 android:layout_width="match_parent"
