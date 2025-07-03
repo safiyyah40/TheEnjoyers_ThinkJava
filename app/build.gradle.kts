@@ -50,6 +50,8 @@ dependencies {
     // Firebase
     implementation("com.google.firebase:firebase-auth:22.3.1")
     implementation("com.google.firebase:firebase-firestore:24.10.0")
+    implementation ("com.google.firebase:firebase-storage:20.3.0")
+
 
 
     // AndroidX dan UI
@@ -59,6 +61,8 @@ dependencies {
     implementation("androidx.activity:activity-ktx:1.8.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation(libs.androidx.activity)
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+
 
     // Testing
     testImplementation("junit:junit:4.13.2")

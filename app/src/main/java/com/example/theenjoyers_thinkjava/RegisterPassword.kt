@@ -26,6 +26,7 @@ class RegisterPassword : AppCompatActivity() {
 
     private var email: String? = null
     private var username: String? = null
+    private var fullName: String? = null
     private var isPasswordVisible = false
     private var isConfirmPasswordVisible = false
 
@@ -45,6 +46,7 @@ class RegisterPassword : AppCompatActivity() {
 
         email = intent.getStringExtra("email")
         username = intent.getStringExtra("username")
+        fullName = intent.getStringExtra("fullName")
 
         // Inisialisasi view
         passwordField = findViewById(R.id.editTextText4)
@@ -90,8 +92,8 @@ class RegisterPassword : AppCompatActivity() {
         val password = passwordField.text.toString().trim()
         val confirmPassword = confirmPasswordField.text.toString().trim()
 
-        if (email.isNullOrEmpty() || username.isNullOrEmpty()) {
-            Toast.makeText(this, "Email atau Username hilang, silakan ulangi proses", Toast.LENGTH_SHORT).show()
+        if (email.isNullOrEmpty() || username.isNullOrEmpty() || fullName.isNullOrEmpty()) {
+            Toast.makeText(this, "Data pendaftaran tidak lengkap, silakan ulangi.", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -115,7 +117,7 @@ class RegisterPassword : AppCompatActivity() {
                 if (task.isSuccessful) {
                     val signInMethods = task.result?.signInMethods
                     if (signInMethods.isNullOrEmpty()) {
-                        createAccount(email!!, password, username!!)
+                        createAccount(email!!, password, username!!, fullName!!)
                     } else {
                         Toast.makeText(this, "Email sudah terdaftar, silakan login.", Toast.LENGTH_LONG).show()
                         startActivity(Intent(this, Login::class.java))
@@ -127,7 +129,7 @@ class RegisterPassword : AppCompatActivity() {
             }
     }
 
-    private fun createAccount(email: String, password: String, username: String) {
+    private fun createAccount(email: String, password: String, username: String, fullName: String) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
@@ -137,7 +139,8 @@ class RegisterPassword : AppCompatActivity() {
                             "uid" to userId,
                             "email" to email,
                             "username" to username,
-                            "username_lowercase" to username.lowercase()
+                            "username_lowercase" to username.lowercase(),
+                            "fullName" to fullName // ✅ ini harus sesuai dengan yang dikirim dari intent
                         )
 
                         firestore.collection("users").document(userId)
