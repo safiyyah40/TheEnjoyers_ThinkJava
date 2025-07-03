@@ -13,6 +13,7 @@ import androidx.core.view.WindowInsetsCompat
 
 class RegisterUsername : AppCompatActivity() {
 
+    private lateinit var fullNameField: EditText
     private lateinit var usernameField: EditText
     private lateinit var emailField: EditText
     private lateinit var nextButton: Button
@@ -30,6 +31,7 @@ class RegisterUsername : AppCompatActivity() {
         }
 
         // Inisialisasi View
+        fullNameField = findViewById(R.id.editTextFullName) // ← tambahan
         usernameField = findViewById(R.id.editTextText)
         emailField = findViewById(R.id.editTextText1)
         nextButton = findViewById(R.id.button6)
@@ -42,13 +44,19 @@ class RegisterUsername : AppCompatActivity() {
         nextButton.setOnClickListener {
             handleNext()
         }
-    } //proses
+    }
 
     private fun handleNext() {
+        val fullName = fullNameField.text.toString().trim()
         val username = usernameField.text.toString().trim()
         val email = emailField.text.toString().trim()
 
         // Validasi input
+        if (fullName.isEmpty()) {
+            fullNameField.error = "Nama lengkap tidak boleh kosong"
+            return
+        }
+
         if (username.isEmpty()) {
             usernameField.error = "Username tidak boleh kosong"
             return
@@ -66,6 +74,7 @@ class RegisterUsername : AppCompatActivity() {
 
         // Lanjut ke halaman RegisterPassword dengan membawa data
         val intent = Intent(this, RegisterPassword::class.java)
+        intent.putExtra("fullName", fullName)
         intent.putExtra("username", username)
         intent.putExtra("email", email)
         startActivity(intent)

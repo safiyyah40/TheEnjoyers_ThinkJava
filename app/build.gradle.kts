@@ -3,7 +3,6 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.gms.google.services)
     id("kotlin-kapt")
-
 }
 
 android {
@@ -53,7 +52,6 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore:24.10.0")
 
 
-
     // AndroidX dan UI
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -70,5 +68,4 @@ dependencies {
     // dependensi Glide untuk memuat gambar dari URL
     implementation("com.github.bumptech.glide:glide:4.16.0")
     kapt("com.github.bumptech.glide:compiler:4.16.0")
-
 }

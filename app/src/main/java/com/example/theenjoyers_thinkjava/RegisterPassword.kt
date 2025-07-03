@@ -4,10 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
 import android.util.Patterns
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -21,13 +18,16 @@ class RegisterPassword : AppCompatActivity() {
     private lateinit var firestore: FirebaseFirestore
 
     private lateinit var passwordField: EditText
-    private lateinit var toggleButton: ImageButton
+    private lateinit var confirmPasswordField: EditText
+    private lateinit var togglePasswordButton: ImageButton
+    private lateinit var toggleConfirmPasswordButton: ImageButton
     private lateinit var submitButton: Button
     private lateinit var backButton: Button
 
     private var email: String? = null
     private var username: String? = null
     private var isPasswordVisible = false
+    private var isConfirmPasswordVisible = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,38 +46,49 @@ class RegisterPassword : AppCompatActivity() {
         email = intent.getStringExtra("email")
         username = intent.getStringExtra("username")
 
+        // Inisialisasi view
         passwordField = findViewById(R.id.editTextText4)
-        toggleButton = findViewById(R.id.buttonTogglePassword)
+        confirmPasswordField = findViewById(R.id.editTextConfirmPassword)
+        togglePasswordButton = findViewById(R.id.buttonTogglePassword)
+        toggleConfirmPasswordButton = findViewById(R.id.buttonToggleConfirmPassword)
         submitButton = findViewById(R.id.button5)
         backButton = findViewById(R.id.button8)
 
-        backButton.setOnClickListener {
-            finish()
-        }
+        backButton.setOnClickListener { finish() }
 
-        toggleButton.setOnClickListener {
-            togglePasswordVisibility()
-        }
+        togglePasswordButton.setOnClickListener { togglePasswordVisibility() }
+        toggleConfirmPasswordButton.setOnClickListener { toggleConfirmPasswordVisibility() }
 
-        submitButton.setOnClickListener {
-            handleRegister()
-        }
+        submitButton.setOnClickListener { handleRegister() }
     }
 
     private fun togglePasswordVisibility() {
         isPasswordVisible = !isPasswordVisible
         if (isPasswordVisible) {
             passwordField.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-            toggleButton.setImageResource(R.drawable.visibilty_off)  // Icon mata tertutup
+            togglePasswordButton.setImageResource(R.drawable.visibilty_off)
         } else {
             passwordField.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-            toggleButton.setImageResource(R.drawable.visibility)  // Icon mata terbuka
+            togglePasswordButton.setImageResource(R.drawable.visibility)
         }
         passwordField.setSelection(passwordField.text.length)
     }
 
+    private fun toggleConfirmPasswordVisibility() {
+        isConfirmPasswordVisible = !isConfirmPasswordVisible
+        if (isConfirmPasswordVisible) {
+            confirmPasswordField.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+            toggleConfirmPasswordButton.setImageResource(R.drawable.visibilty_off)
+        } else {
+            confirmPasswordField.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            toggleConfirmPasswordButton.setImageResource(R.drawable.visibility)
+        }
+        confirmPasswordField.setSelection(confirmPasswordField.text.length)
+    }
+
     private fun handleRegister() {
         val password = passwordField.text.toString().trim()
+        val confirmPassword = confirmPasswordField.text.toString().trim()
 
         if (email.isNullOrEmpty() || username.isNullOrEmpty()) {
             Toast.makeText(this, "Email atau Username hilang, silakan ulangi proses", Toast.LENGTH_SHORT).show()
@@ -91,6 +102,11 @@ class RegisterPassword : AppCompatActivity() {
 
         if (password.length < 6) {
             passwordField.error = "Password minimal 6 karakter"
+            return
+        }
+
+        if (password != confirmPassword) {
+            confirmPasswordField.error = "Konfirmasi password tidak cocok"
             return
         }
 
@@ -120,7 +136,8 @@ class RegisterPassword : AppCompatActivity() {
                         val userMap = hashMapOf(
                             "uid" to userId,
                             "email" to email,
-                            "username" to username
+                            "username" to username,
+                            "username_lowercase" to username.lowercase()
                         )
 
                         firestore.collection("users").document(userId)
