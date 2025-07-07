@@ -47,12 +47,16 @@ dependencies {
     // Grid Layout
     implementation("androidx.gridlayout:gridlayout:1.0.0")
 
-    // Firebase
-    implementation("com.google.firebase:firebase-auth:22.3.1")
-    implementation("com.google.firebase:firebase-firestore:24.10.0")
-    implementation ("com.google.firebase:firebase-storage:20.3.0")
+    // --- PERBAIKAN DI SINI ---
+    // 1. Implementasikan Firebase BOM (Bill of Materials)
+    // Ini akan mengelola semua versi library Firebase agar kompatibel.
+    implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
 
-
+    // 2. Tambahkan library Firebase yang dibutuhkan TANPA versi
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-firestore")
+    implementation("com.google.firebase:firebase-storage")
+    // --- AKHIR PERBAIKAN ---
 
     // AndroidX dan UI
     implementation("androidx.core:core-ktx:1.12.0")
@@ -61,15 +65,16 @@ dependencies {
     implementation("androidx.activity:activity-ktx:1.8.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation(libs.androidx.activity)
-    implementation("com.github.bumptech.glide:glide:4.16.0")
 
+    // Dependensi Glide untuk memuat gambar dari URL
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    kapt("com.github.bumptech.glide:compiler:4.16.0")
 
     // Testing
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
-    // dependensi Glide untuk memuat gambar dari URL
-    implementation("com.github.bumptech.glide:glide:4.16.0")
-    kapt("com.github.bumptech.glide:compiler:4.16.0")
+    // CATATAN: Pastikan baris "implementation(libs.firebase.storage.ktx)"
+    // sudah dihapus karena tidak lagi diperlukan.
 }

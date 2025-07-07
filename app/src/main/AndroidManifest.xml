@@ -70,8 +70,6 @@
         <activity
             android:name=".EditProfile"
             android:exported="true" />
-        <activity android:name=".EditProfile"
-            android:exported="true"/>
     </application>
 
 </manifest>
