@@ -8,9 +8,9 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide 
+import com.bumptech.glide.Glide
 
-class LeaderboardAdapter(private val rankList: List<LeaderboardEntry>) :
+class LeaderboardAdapter(private var rankList: List<LeaderboardEntry>) :
     RecyclerView.Adapter<LeaderboardAdapter.RankViewHolder>() {
 
     class RankViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -34,14 +34,14 @@ class LeaderboardAdapter(private val rankList: List<LeaderboardEntry>) :
         holder.name.text = entry.name
         holder.score.text = "${entry.score} pts"
 
-        // Muat gambar avatar menggunakan Glide
         Glide.with(holder.itemView.context)
-            .load(entry.avatarUrl)
-            .placeholder(R.drawable.ic_default_avatar) // Buat drawable default
+            .load(entry.avatarUrl.ifEmpty { null }) // Handle jika URL kosong
+            .placeholder(R.drawable.ic_default_avatar)
+            .error(R.drawable.ic_default_avatar)
+            .fallback(R.drawable.ic_default_avatar)
             .circleCrop()
             .into(holder.avatar)
 
-        // Highlight baris jika ini adalah user saat ini
         if (entry.isCurrentUser) {
             holder.card.setCardBackgroundColor(
                 ContextCompat.getColor(holder.itemView.context, R.color.light_green_highlight)
@@ -54,4 +54,9 @@ class LeaderboardAdapter(private val rankList: List<LeaderboardEntry>) :
     }
 
     override fun getItemCount() = rankList.size
+
+    fun updateData(newRankList: List<LeaderboardEntry>) {
+        this.rankList = newRankList
+        notifyDataSetChanged()
+    }
 }

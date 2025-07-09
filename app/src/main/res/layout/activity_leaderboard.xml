@@ -9,7 +9,6 @@
     android:background="#00838F"
     tools:context=".Leaderboard">
 
-    <!-- Latar Belakang Putih Melengkung -->
     <View
         android:id="@+id/background_card"
         android:layout_width="0dp"
@@ -21,56 +20,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Konten yang bisa di-scroll -->
-    <ScrollView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="@id/background_card"
-        app:layout_constraintBottom_toTopOf="@id/bottom_nav_container"
-        app:layout_constraintStart_toStartOf="parent"
+    <TextView
+        android:id="@+id/tv_leaderboard_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:textColor="@android:color/black"
+        android:textSize="22sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        android:clipToPadding="false"
-        android:paddingBottom="24dp">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/background_card"
+        tools:text="Leaderboard Variable Java" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingHorizontal="24dp">
+    <include
+        android:id="@+id/top_3_layout"
+        layout="@layout/item_leaderboard_top_3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_leaderboard_title" />
 
-            <!-- Judul Leaderboard -->
-            <TextView
-                android:id="@+id/tv_leaderboard_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="32dp"
-                android:textColor="@android:color/black"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                tools:text="Leaderbord Variable Java" />
-
-            <!-- Layout untuk TOP 3 Juara -->
-            <include layout="@layout/item_leaderboard_top_3" />
-
-            <!-- RecyclerView untuk peringkat 4 ke bawah -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_leaderboard"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:nestedScrollingEnabled="false"
-                tools:itemCount="7"
-                tools:listitem="@layout/item_leaderboard_rank" />
-
-            <!-- Layout untuk Tombol Kategori -->
-            <include layout="@layout/item_leaderboard_categories" />
-
-        </LinearLayout>
-    </ScrollView>
-
-
-    <!-- Kontainer untuk Bottom Navigation -->
     <RelativeLayout
         android:id="@+id/bottom_nav_container"
         android:layout_width="match_parent"
@@ -78,14 +49,12 @@
         android:clipChildren="false"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <!-- Border/Background Bawah -->
         <View
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:layout_alignParentBottom="true"
             android:background="@drawable/bottom_nav_border_background" />
 
-        <!-- CardView untuk BottomNavigationView -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -107,5 +76,45 @@
                 app:menu="@menu/bottom_nav_menu" />
         </androidx.cardview.widget.CardView>
     </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/categories_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="24dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@id/bottom_nav_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <include layout="@layout/item_leaderboard_categories" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_leaderboard"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:clipToPadding="false"
+        android:paddingHorizontal="24dp"
+        app:layout_constraintTop_toBottomOf="@id/top_3_layout"
+        app:layout_constraintBottom_toTopOf="@id/categories_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:itemCount="5"
+        tools:listitem="@layout/item_leaderboard_rank" />
+
+    <ProgressBar
+        android:id="@+id/leaderboard_loading_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="@id/rv_leaderboard"
+        app:layout_constraintBottom_toBottomOf="@id/rv_leaderboard"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:visibility="visible"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,10 +6,10 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -20,9 +20,12 @@ import com.google.firebase.firestore.Query
 
 class Leaderboard : AppCompatActivity() {
 
+    private val TAG = "LEADERBOARD_ACTIVITY"
+
     private lateinit var leaderboardTitle: TextView
     private lateinit var recyclerView: RecyclerView
     private lateinit var leaderboardAdapter: LeaderboardAdapter
+    private lateinit var loadingIndicator: ProgressBar
     private lateinit var db: FirebaseFirestore
     private lateinit var auth: FirebaseAuth
 
@@ -30,136 +33,117 @@ class Leaderboard : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_leaderboard)
 
-        // Inisialisasi Firebase
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
 
-        // Inisialisasi Views
         leaderboardTitle = findViewById(R.id.tv_leaderboard_title)
         recyclerView = findViewById(R.id.rv_leaderboard)
+        loadingIndicator = findViewById(R.id.leaderboard_loading_indicator) // Pastikan ID ini ada di XML Anda
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        // Muat data default (misal: Variabel) saat pertama kali dibuka
-        loadLeaderboardData("Variabel")
+        leaderboardAdapter = LeaderboardAdapter(emptyList())
+        recyclerView.adapter = leaderboardAdapter
+
+        loadLeaderboardFromFirestore("Variabel")
 
         setupCategoryButtons()
         setupBottomNavigation()
     }
 
     private fun setupCategoryButtons() {
-        findViewById<Button>(R.id.btn_category_variable).setOnClickListener {
-            loadLeaderboardData("Variabel")
-        }
-        findViewById<Button>(R.id.btn_category_inheritance).setOnClickListener {
-            loadLeaderboardData("Inheritance")
-        }
-        findViewById<Button>(R.id.btn_category_array).setOnClickListener {
-            loadLeaderboardData("Array")
-        }
-        findViewById<Button>(R.id.btn_category_looping).setOnClickListener {
-            loadLeaderboardData("Looping")
-        }
+        findViewById<Button>(R.id.btn_category_variable).setOnClickListener { loadLeaderboardFromFirestore("Variabel") }
+        findViewById<Button>(R.id.btn_category_inheritance).setOnClickListener { loadLeaderboardFromFirestore("Inheritance") }
+        findViewById<Button>(R.id.btn_category_array).setOnClickListener { loadLeaderboardFromFirestore("Array") }
+        findViewById<Button>(R.id.btn_category_looping).setOnClickListener { loadLeaderboardFromFirestore("Looping") }
     }
 
-    /**
-     * Fungsi yang mengambil data dari Firestore, bukan lagi data dummy.
-     */
-    private fun loadLeaderboardData(category: String) {
+    private fun loadLeaderboardFromFirestore(category: String) {
         leaderboardTitle.text = "Leaderboard $category Java"
+        clearLeaderboardView()
+        loadingIndicator.visibility = View.VISIBLE
 
         db.collection("leaderboard")
             .whereEqualTo("category", category)
             .orderBy("score", Query.Direction.DESCENDING)
-            .limit(100) // Batasi untuk 100 teratas
+            .limit(100)
             .get()
             .addOnSuccessListener { documents ->
+                loadingIndicator.visibility = View.GONE
                 if (documents.isEmpty) {
-                    // Tampilkan pesan jika leaderboard kosong
-                    Toast.makeText(this, "Leaderboard untuk $category masih kosong.", Toast.LENGTH_SHORT).show()
-                    clearLeaderboardView() // Fungsi untuk membersihkan tampilan
+                    Toast.makeText(this, "Jadilah yang pertama di leaderboard ini!", Toast.LENGTH_SHORT).show()
                     return@addOnSuccessListener
                 }
 
+                val currentUserId = auth.currentUser?.uid
                 val leaderboardList = documents.map { doc ->
                     LeaderboardEntry(
-                        rank = 0, // Akan diisi di bawah
-                        name = doc.getString("username") ?: "N/A",
+                        rank = 0,
+                        name = doc.getString("username") ?: "Tanpa Nama",
                         score = (doc.getLong("score") ?: 0).toInt(),
                         avatarUrl = doc.getString("photoUrl") ?: "",
-                        isCurrentUser = (doc.getString("userId") == auth.currentUser?.uid) // Tandai jika ini user saat ini
+                        isCurrentUser = (doc.getString("userId") == currentUserId)
                     )
                 }.mapIndexed { index, entry ->
                     entry.copy(rank = index + 1)
                 }
 
-                // Pisahkan Top 3 dan sisanya
                 val top3 = leaderboardList.take(3)
-                val rest = leaderboardList.drop(3)
+                val restOfTheList = leaderboardList.drop(3)
 
                 populateTop3(top3)
-                leaderboardAdapter = LeaderboardAdapter(rest)
-                recyclerView.adapter = leaderboardAdapter
-
+                leaderboardAdapter.updateData(restOfTheList)
             }
             .addOnFailureListener { exception ->
-                Log.e("Firestore", "Gagal memuat leaderboard", exception)
-                Toast.makeText(this, "Gagal memuat data.", Toast.LENGTH_SHORT).show()
+                loadingIndicator.visibility = View.GONE
+                Log.e(TAG, "Gagal memuat leaderboard: ", exception)
+                Toast.makeText(this, "Error: Gagal memuat data. Cek Logcat.", Toast.LENGTH_LONG).show()
             }
+    }
+
+    private fun populateTop3(top3List: List<LeaderboardEntry>) {
+        val rank1Layout = findViewById<View>(R.id.layout_rank_1)
+        val rank2Layout = findViewById<View>(R.id.layout_rank_2)
+        val rank3Layout = findViewById<View>(R.id.layout_rank_3)
+
+        rank1Layout.visibility = View.INVISIBLE
+        rank2Layout.visibility = View.INVISIBLE
+        rank3Layout.visibility = View.INVISIBLE
+
+        if (top3List.isNotEmpty()) {
+            rank1Layout.visibility = View.VISIBLE
+            rank1Layout.findViewById<TextView>(R.id.tv_name_rank_1).text = top3List[0].name
+            rank1Layout.findViewById<TextView>(R.id.tv_score_rank_1).text = "${top3List[0].score} pts"
+            val avatar1 = rank1Layout.findViewById<ImageView>(R.id.iv_rank_1)
+            Glide.with(this).load(top3List[0].avatarUrl.ifEmpty { null }).placeholder(R.drawable.ic_default_avatar).error(R.drawable.ic_default_avatar).circleCrop().into(avatar1)
+        }
+
+        if (top3List.size >= 2) {
+            rank2Layout.visibility = View.VISIBLE
+            rank2Layout.findViewById<TextView>(R.id.tv_name_rank_2).text = top3List[1].name
+            rank2Layout.findViewById<TextView>(R.id.tv_score_rank_2).text = "${top3List[1].score} pts"
+            val avatar2 = rank2Layout.findViewById<ImageView>(R.id.iv_rank_2)
+            Glide.with(this).load(top3List[1].avatarUrl.ifEmpty { null }).placeholder(R.drawable.ic_default_avatar).error(R.drawable.ic_default_avatar).circleCrop().into(avatar2)
+        }
+
+        if (top3List.size >= 3) {
+            rank3Layout.visibility = View.VISIBLE
+            rank3Layout.findViewById<TextView>(R.id.tv_name_rank_3).text = top3List[2].name
+            rank3Layout.findViewById<TextView>(R.id.tv_score_rank_3).text = "${top3List[2].score} pts"
+            val avatar3 = rank3Layout.findViewById<ImageView>(R.id.iv_rank_3)
+            Glide.with(this).load(top3List[2].avatarUrl.ifEmpty { null }).placeholder(R.drawable.ic_default_avatar).error(R.drawable.ic_default_avatar).circleCrop().into(avatar3)
+        }
     }
 
     private fun clearLeaderboardView() {
-        // Kosongkan tampilan Top 3
-        findViewById<TextView>(R.id.tv_name_rank_1).text = "-"
-        findViewById<TextView>(R.id.tv_score_rank_1).text = ""
-        findViewById<ImageView>(R.id.iv_rank_1).setImageResource(R.drawable.ic_default_avatar)
-        // Lakukan hal yang sama untuk rank 2 dan 3
-        findViewById<TextView>(R.id.tv_name_rank_2).text = "-"
-        findViewById<TextView>(R.id.tv_score_rank_2).text = ""
-        findViewById<ImageView>(R.id.iv_rank_2).setImageResource(R.drawable.ic_default_avatar)
-
-        findViewById<TextView>(R.id.tv_name_rank_3).text = "-"
-        findViewById<TextView>(R.id.tv_score_rank_3).text = ""
-        findViewById<ImageView>(R.id.iv_rank_3).setImageResource(R.drawable.ic_default_avatar)
-
-        // Kosongkan RecyclerView
-        recyclerView.adapter = LeaderboardAdapter(emptyList())
-    }
-
-
-    private fun populateTop3(top3List: List<LeaderboardEntry>) {
-        // Pastikan view di-reset jika data tidak lengkap
-        clearLeaderboardView()
-
-        // Juara 1
-        if (top3List.isNotEmpty()) {
-            findViewById<TextView>(R.id.tv_name_rank_1).text = top3List[0].name
-            findViewById<TextView>(R.id.tv_score_rank_1).text = "${top3List[0].score} pts"
-            val ivRank1 = findViewById<ImageView>(R.id.iv_rank_1)
-            Glide.with(this).load(top3List[0].avatarUrl).placeholder(R.drawable.ic_default_avatar).circleCrop().into(ivRank1)
-        }
-
-        // Juara 2
-        if (top3List.size >= 2) {
-            findViewById<TextView>(R.id.tv_name_rank_2).text = top3List[1].name
-            findViewById<TextView>(R.id.tv_score_rank_2).text = "${top3List[1].score} pts"
-            val ivRank2 = findViewById<ImageView>(R.id.iv_rank_2)
-            Glide.with(this).load(top3List[1].avatarUrl).placeholder(R.drawable.ic_default_avatar).circleCrop().into(ivRank2)
-        }
-
-        // Juara 3
-        if (top3List.size >= 3) {
-            findViewById<TextView>(R.id.tv_name_rank_3).text = top3List[2].name
-            findViewById<TextView>(R.id.tv_score_rank_3).text = "${top3List[2].score} pts"
-            val ivRank3 = findViewById<ImageView>(R.id.iv_rank_3)
-            Glide.with(this).load(top3List[2].avatarUrl).placeholder(R.drawable.ic_default_avatar).circleCrop().into(ivRank3)
+        populateTop3(emptyList())
+        if(::leaderboardAdapter.isInitialized) {
+            leaderboardAdapter.updateData(emptyList())
         }
     }
-
 
     private fun setupBottomNavigation() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_menu)
         bottomNavigationView.selectedItemId = R.id.menu_leaderboard
-
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.menu_dashboard -> {
