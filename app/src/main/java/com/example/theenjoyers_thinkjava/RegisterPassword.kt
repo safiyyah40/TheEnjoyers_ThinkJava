@@ -6,6 +6,7 @@ import android.text.InputType
 import android.util.Patterns
 import android.widget.*
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -48,7 +49,6 @@ class RegisterPassword : AppCompatActivity() {
         username = intent.getStringExtra("username")
         fullName = intent.getStringExtra("fullName")
 
-        // Inisialisasi view
         passwordField = findViewById(R.id.editTextText4)
         confirmPasswordField = findViewById(R.id.editTextConfirmPassword)
         togglePasswordButton = findViewById(R.id.buttonTogglePassword)
@@ -64,27 +64,34 @@ class RegisterPassword : AppCompatActivity() {
         submitButton.setOnClickListener { handleRegister() }
     }
 
+    private fun showPopup(title: String, message: String, onOk: (() -> Unit)? = null) {
+        AlertDialog.Builder(this)
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton("OK") { _, _ -> onOk?.invoke() }
+            .setCancelable(false)
+            .show()
+    }
+
     private fun togglePasswordVisibility() {
         isPasswordVisible = !isPasswordVisible
-        if (isPasswordVisible) {
-            passwordField.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-            togglePasswordButton.setImageResource(R.drawable.visibilty_off)
+        passwordField.inputType = if (isPasswordVisible) {
+            InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
         } else {
-            passwordField.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-            togglePasswordButton.setImageResource(R.drawable.visibility)
+            InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
         }
+        togglePasswordButton.setImageResource(if (isPasswordVisible) R.drawable.visibilty_off else R.drawable.visibility)
         passwordField.setSelection(passwordField.text.length)
     }
 
     private fun toggleConfirmPasswordVisibility() {
         isConfirmPasswordVisible = !isConfirmPasswordVisible
-        if (isConfirmPasswordVisible) {
-            confirmPasswordField.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-            toggleConfirmPasswordButton.setImageResource(R.drawable.visibilty_off)
+        confirmPasswordField.inputType = if (isConfirmPasswordVisible) {
+            InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
         } else {
-            confirmPasswordField.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-            toggleConfirmPasswordButton.setImageResource(R.drawable.visibility)
+            InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
         }
+        toggleConfirmPasswordButton.setImageResource(if (isConfirmPasswordVisible) R.drawable.visibilty_off else R.drawable.visibility)
         confirmPasswordField.setSelection(confirmPasswordField.text.length)
     }
 
@@ -93,22 +100,22 @@ class RegisterPassword : AppCompatActivity() {
         val confirmPassword = confirmPasswordField.text.toString().trim()
 
         if (email.isNullOrEmpty() || username.isNullOrEmpty() || fullName.isNullOrEmpty()) {
-            Toast.makeText(this, "Data pendaftaran tidak lengkap, silakan ulangi.", Toast.LENGTH_SHORT).show()
+            showPopup("Data Tidak Lengkap", "Data pendaftaran tidak lengkap, silakan ulangi.")
             return
         }
 
         if (!Patterns.EMAIL_ADDRESS.matcher(email!!).matches()) {
-            Toast.makeText(this, "Format email tidak valid", Toast.LENGTH_SHORT).show()
+            showPopup("Email Tidak Valid", "Format email tidak sesuai.")
             return
         }
 
         if (password.length < 6) {
-            passwordField.error = "Password minimal 6 karakter"
+            showPopup("Password Tidak Valid", "Password minimal 6 karakter.")
             return
         }
 
         if (password != confirmPassword) {
-            confirmPasswordField.error = "Konfirmasi password tidak cocok"
+            showPopup("Konfirmasi Salah", "Konfirmasi password tidak cocok.")
             return
         }
 
@@ -119,12 +126,13 @@ class RegisterPassword : AppCompatActivity() {
                     if (signInMethods.isNullOrEmpty()) {
                         createAccount(email!!, password, username!!, fullName!!)
                     } else {
-                        Toast.makeText(this, "Email sudah terdaftar, silakan login.", Toast.LENGTH_LONG).show()
-                        startActivity(Intent(this, Login::class.java))
-                        finish()
+                        showPopup("Email Sudah Terdaftar", "Email sudah digunakan. Silakan login.") {
+                            startActivity(Intent(this, Login::class.java))
+                            finish()
+                        }
                     }
                 } else {
-                    Toast.makeText(this, "Gagal mengecek email: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                    showPopup("Kesalahan", "Gagal mengecek email: ${task.exception?.message}")
                 }
             }
     }
@@ -140,30 +148,32 @@ class RegisterPassword : AppCompatActivity() {
                             "email" to email,
                             "username" to username,
                             "username_lowercase" to username.lowercase(),
-                            "fullName" to fullName // ✅ ini harus sesuai dengan yang dikirim dari intent
+                            "fullName" to fullName
                         )
 
                         firestore.collection("users").document(userId)
                             .set(userMap)
                             .addOnSuccessListener {
-                                Toast.makeText(this, "Registrasi berhasil!", Toast.LENGTH_SHORT).show()
-                                startActivity(Intent(this, Login::class.java))
-                                finish()
+                                showPopup("Registrasi Berhasil", "Akun berhasil dibuat.") {
+                                    startActivity(Intent(this, Login::class.java))
+                                    finish()
+                                }
                             }
                             .addOnFailureListener { e ->
-                                Toast.makeText(this, "Gagal menyimpan data user: ${e.message}", Toast.LENGTH_LONG).show()
+                                showPopup("Gagal Simpan", "Gagal menyimpan data pengguna: ${e.message}")
                             }
                     } else {
-                        Toast.makeText(this, "Gagal mendapatkan UID user.", Toast.LENGTH_LONG).show()
+                        showPopup("Kesalahan UID", "Gagal mendapatkan UID pengguna.")
                     }
                 } else {
-                    val errorMessage = task.exception?.message
-                    if (errorMessage != null && errorMessage.contains("email address is already in use")) {
-                        Toast.makeText(this, "Email sudah terdaftar, silakan login.", Toast.LENGTH_LONG).show()
-                        startActivity(Intent(this, Login::class.java))
-                        finish()
+                    val errorMessage = task.exception?.message ?: "Terjadi kesalahan saat membuat akun."
+                    if (errorMessage.contains("email address is already in use")) {
+                        showPopup("Email Sudah Terdaftar", "Email sudah digunakan. Silakan login.") {
+                            startActivity(Intent(this, Login::class.java))
+                            finish()
+                        }
                     } else {
-                        Toast.makeText(this, "Gagal membuat akun: $errorMessage", Toast.LENGTH_LONG).show()
+                        showPopup("Gagal Registrasi", errorMessage)
                     }
                 }
             }

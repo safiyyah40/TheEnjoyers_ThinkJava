@@ -24,7 +24,9 @@ class Leaderboard : AppCompatActivity() {
 
     private lateinit var leaderboardTitle: TextView
     private lateinit var recyclerView: RecyclerView
+    private lateinit var recyclerViewRanks4to10: RecyclerView
     private lateinit var leaderboardAdapter: LeaderboardAdapter
+    private lateinit var leaderboardAdapter4to10: LeaderboardAdapter
     private lateinit var loadingIndicator: ProgressBar
     private lateinit var db: FirebaseFirestore
     private lateinit var auth: FirebaseAuth
@@ -38,11 +40,15 @@ class Leaderboard : AppCompatActivity() {
 
         leaderboardTitle = findViewById(R.id.tv_leaderboard_title)
         recyclerView = findViewById(R.id.rv_leaderboard)
-        loadingIndicator = findViewById(R.id.leaderboard_loading_indicator) // Pastikan ID ini ada di XML Anda
+        recyclerViewRanks4to10 = findViewById(R.id.rv_leaderboard_4_to_10) // Tambahkan ID ini ke XML Anda
+        loadingIndicator = findViewById(R.id.leaderboard_loading_indicator)
         recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerViewRanks4to10.layoutManager = LinearLayoutManager(this)
 
         leaderboardAdapter = LeaderboardAdapter(emptyList())
+        leaderboardAdapter4to10 = LeaderboardAdapter(emptyList())
         recyclerView.adapter = leaderboardAdapter
+        recyclerViewRanks4to10.adapter = leaderboardAdapter4to10
 
         loadLeaderboardFromFirestore("Variabel")
 
@@ -88,9 +94,11 @@ class Leaderboard : AppCompatActivity() {
                 }
 
                 val top3 = leaderboardList.take(3)
-                val restOfTheList = leaderboardList.drop(3)
+                val ranks4to10 = leaderboardList.drop(3).take(7)
+                val restOfTheList = leaderboardList.drop(10)
 
                 populateTop3(top3)
+                leaderboardAdapter4to10.updateData(ranks4to10)
                 leaderboardAdapter.updateData(restOfTheList)
             }
             .addOnFailureListener { exception ->
@@ -138,6 +146,9 @@ class Leaderboard : AppCompatActivity() {
         populateTop3(emptyList())
         if(::leaderboardAdapter.isInitialized) {
             leaderboardAdapter.updateData(emptyList())
+        }
+        if(::leaderboardAdapter4to10.isInitialized) {
+            leaderboardAdapter4to10.updateData(emptyList())
         }
     }
 

@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import androidx.appcompat.app.AlertDialog
 
 class Login : AppCompatActivity() {
 
@@ -77,17 +78,30 @@ class Login : AppCompatActivity() {
                     if (!email.isNullOrEmpty()) {
                         loginWithEmail(email, password, username)
                     } else {
-                        Toast.makeText(this, "Email untuk username ini tidak ditemukan.", Toast.LENGTH_LONG).show()
+                        AlertDialog.Builder(this)
+                            .setTitle("Login Gagal")
+                            .setMessage("Email yang terkait dengan username ini tidak ditemukan.")
+                            .setPositiveButton("OK", null)
+                            .show()
                     }
                 } else {
-                    Toast.makeText(this, "Username tidak ditemukan.", Toast.LENGTH_LONG).show()
+                    AlertDialog.Builder(this)
+                        .setTitle("Login Gagal")
+                        .setMessage("Username tidak ditemukan. Silakan periksa kembali.")
+                        .setPositiveButton("OK", null)
+                        .show()
                 }
             }
             .addOnFailureListener { e ->
                 Log.e("LOGIN_FIRESTORE", "Gagal mengambil data username", e)
-                Toast.makeText(this, "Gagal mencari username: ${e.message}", Toast.LENGTH_LONG).show()
+                AlertDialog.Builder(this)
+                    .setTitle("Kesalahan Server")
+                    .setMessage("Terjadi kesalahan saat mengakses data. Silakan coba lagi nanti.")
+                    .setPositiveButton("OK", null)
+                    .show()
             }
     }
+
 
     private fun loginWithEmail(email: String, password: String, username: String) {
         auth.signInWithEmailAndPassword(email, password)
@@ -98,13 +112,26 @@ class Login : AppCompatActivity() {
                     sharedPref.edit().putString("username", username).apply()
 
                     Toast.makeText(this, "Selamat datang, $username!", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this, Dashboard::class.java)
-                    startActivity(intent)
+                    startActivity(Intent(this, Dashboard::class.java))
                     finish()
                 } else {
-                    Toast.makeText(this, "Login gagal: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                    // Tampilkan pesan error dalam bahasa Indonesia
+                    val errorCode = task.exception?.message ?: ""
+                    val message = when {
+                        errorCode.contains("password is invalid", true) -> "Username atau kata sandi salah."
+                        errorCode.contains("no user record", true) -> "Akun dengan username ini tidak ditemukan."
+                        else -> "Terjadi kesalahan saat masuk. Silakan coba lagi."
+                    }
+
+                    AlertDialog.Builder(this)
+                        .setTitle("Login Gagal")
+                        .setMessage(message)
+                        .setPositiveButton("OK", null)
+                        .show()
+
                     Log.e("LOGIN_AUTH", "Gagal login", task.exception)
                 }
             }
     }
+
 }
