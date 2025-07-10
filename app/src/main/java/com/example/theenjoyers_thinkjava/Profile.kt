@@ -12,6 +12,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.Timestamp
+import com.bumptech.glide.Glide
+import android.widget.ImageView
+
 
 // Data class untuk menampung data skor dari Firestore
 data class QuizScore(
@@ -38,6 +41,7 @@ class Profile : AppCompatActivity() {
         setupEditProfileButton()
         setupLogoutButton()
         showUsername()
+        loadProfilePicture()
 
         // Panggil fungsi untuk memuat statistik skor
         loadScoreStats()
@@ -122,6 +126,30 @@ class Profile : AppCompatActivity() {
             terendah.text = "Nilai Terendah: $minScore"
         }
     }
+
+    fun String?.ifNullOrEmpty(default: () -> String?): String? {
+        return if (this.isNullOrEmpty()) default() else this
+    }
+
+
+    private fun loadProfilePicture() {
+        val userId = auth.currentUser?.uid ?: return
+        val avatarImageView = findViewById<ImageView>(R.id.image_avatar)
+
+        db.collection("users").document(userId).get()
+            .addOnSuccessListener { document ->
+                val photoUrl = document.getString("photoUrl")
+
+                Glide.with(this)
+                    .load(photoUrl.ifNullOrEmpty { null })
+                    .placeholder(R.drawable.ic_default_avatar)
+                    .error(R.drawable.ic_default_avatar)
+                    .fallback(R.drawable.ic_default_avatar)
+                    .circleCrop()
+                    .into(avatarImageView)
+            }
+    }
+
 
     private fun setupBottomNavigation() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_menu)

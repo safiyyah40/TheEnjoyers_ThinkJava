@@ -72,11 +72,14 @@ class EditProfile : AppCompatActivity() {
                     editTextAge.setText(document.getLong("age")?.toString() ?: "")
 
                     val photoUrl = document.getString("photoUrl")
-                    if (!photoUrl.isNullOrEmpty()) {
-                        Glide.with(this)
-                            .load(photoUrl)
-                            .into(imageAvatar)
-                    }
+
+                    Glide.with(this)
+                        .load(photoUrl.ifNullOrEmpty { null })
+                        .placeholder(R.drawable.ic_default_avatar)
+                        .error(R.drawable.ic_default_avatar)
+                        .fallback(R.drawable.ic_default_avatar)
+                        .circleCrop()
+                        .into(imageAvatar)
                 }
             }
 
@@ -112,6 +115,10 @@ class EditProfile : AppCompatActivity() {
                             userData["photoUrl"] = uri.toString()
                             Glide.with(this)
                                 .load(uri)
+                                .placeholder(R.drawable.ic_default_avatar)
+                                .error(R.drawable.ic_default_avatar)
+                                .fallback(R.drawable.ic_default_avatar)
+                                .circleCrop()
                                 .into(imageAvatar)
                             updateUserFirestore(userId, userData)
                         }
@@ -175,5 +182,10 @@ class EditProfile : AppCompatActivity() {
         } else {
             Toast.makeText(this, "Izin dibutuhkan untuk memilih foto", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    // Extension function tambahan
+    private fun String?.ifNullOrEmpty(default: () -> String?): String? {
+        return if (this.isNullOrEmpty()) default() else this
     }
 }
