@@ -13,11 +13,23 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.bumptech.glide.signature.ObjectKey
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
-import com.google.firebase.storage.FirebaseStorage
+import io.ktor.client.*
+import io.ktor.client.engine.okhttp.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.http.*
+import io.ktor.serialization.kotlinx.json.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.Json
 
 class EditProfile : AppCompatActivity() {
 
@@ -32,7 +44,6 @@ class EditProfile : AppCompatActivity() {
 
     private val auth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance()
-    private val storage = FirebaseStorage.getInstance()
 
     companion object {
         private const val PICK_IMAGE_REQUEST = 1
@@ -72,12 +83,15 @@ class EditProfile : AppCompatActivity() {
                     editTextAge.setText(document.getLong("age")?.toString() ?: "")
 
                     val photoUrl = document.getString("photoUrl")
+                    Log.d("PhotoURL", "URL: $photoUrl")
 
                     Glide.with(this)
                         .load(photoUrl.ifNullOrEmpty { null })
                         .placeholder(R.drawable.ic_default_avatar)
                         .error(R.drawable.ic_default_avatar)
                         .fallback(R.drawable.ic_default_avatar)
+                        .dontAnimate()
+                        .signature(ObjectKey(System.currentTimeMillis()))
                         .circleCrop()
                         .into(imageAvatar)
                 }
@@ -108,25 +122,28 @@ class EditProfile : AppCompatActivity() {
             )
 
             if (selectedImageUri != null) {
-                val fileRef = storage.reference.child("profile_pictures/$userId.jpg")
-                fileRef.putFile(selectedImageUri!!)
-                    .addOnSuccessListener {
-                        fileRef.downloadUrl.addOnSuccessListener { uri ->
-                            userData["photoUrl"] = uri.toString()
-                            Glide.with(this)
-                                .load(uri)
-                                .placeholder(R.drawable.ic_default_avatar)
-                                .error(R.drawable.ic_default_avatar)
-                                .fallback(R.drawable.ic_default_avatar)
-                                .circleCrop()
-                                .into(imageAvatar)
-                            updateUserFirestore(userId, userData)
-                        }
+                lifecycleScope.launch {
+                    val photoUrl = uploadToSupabase(selectedImageUri!!, userId)
+                    if (photoUrl != null) {
+                        userData["photoUrl"] = photoUrl
+
+                        updateUserFirestore(userId, userData)
+
+                        Toast.makeText(this@EditProfile, "Foto berhasil diunggah", Toast.LENGTH_SHORT).show()
+
+                        Glide.with(this@EditProfile)
+                            .load(photoUrl)
+                            .placeholder(R.drawable.ic_default_avatar)
+                            .error(R.drawable.ic_default_avatar)
+                            .fallback(R.drawable.ic_default_avatar)
+                            .dontAnimate()
+                            .signature(ObjectKey(System.currentTimeMillis()))
+                            .circleCrop()
+                            .into(imageAvatar)
+                    } else {
+                        Toast.makeText(this@EditProfile, "Gagal upload foto ke Supabase", Toast.LENGTH_SHORT).show()
                     }
-                    .addOnFailureListener { e ->
-                        Toast.makeText(this, "Gagal upload foto: ${e.message}", Toast.LENGTH_SHORT).show()
-                        Log.e("UploadError", "Foto gagal diupload", e)
-                    }
+                }
             } else {
                 updateUserFirestore(userId, userData)
             }
@@ -187,5 +204,39 @@ class EditProfile : AppCompatActivity() {
     // Extension function tambahan
     private fun String?.ifNullOrEmpty(default: () -> String?): String? {
         return if (this.isNullOrEmpty()) default() else this
+    }
+
+    private suspend fun uploadToSupabase(uri: Uri, userId: String): String? {
+        val supabaseUrl = "https://uoutenfhjppsbigvrgwi.supabase.co"
+        val supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVvdXRlbmZoanBwc2JpZ3ZyZ3dpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTIxMzk4NzMsImV4cCI6MjA2NzcxNTg3M30.avbSfwfpCNCrzyu8Q3nlQh3mFgDxBBD0yaVXrt6i8D8"
+        val filePath = "$userId/avatar.jpg"
+        val mimeType = "image/jpeg"
+
+        val fileBytes = withContext(Dispatchers.IO) {
+            contentResolver.openInputStream(uri)?.readBytes()
+        } ?: return null
+
+        val client = HttpClient(OkHttp) {
+            install(ContentNegotiation) {
+                json(Json { ignoreUnknownKeys = true })
+            }
+        }
+
+        val response: HttpResponse = client.put("$supabaseUrl/storage/v1/object/profile-pictures/$filePath") {
+            header("Authorization", "Bearer $supabaseKey")
+            header("Content-Type", mimeType)
+            setBody(fileBytes)
+        }
+
+        val responseBody = response.bodyAsText()
+        Log.e("SupabaseUpload", "Status: ${response.status}, Body: $responseBody")
+
+        client.close()
+
+        return if (response.status.value in 200..299) {
+            "$supabaseUrl/storage/v1/object/public/profile-pictures/$filePath"
+        } else {
+            null
+        }
     }
 }

@@ -131,7 +131,6 @@ class Profile : AppCompatActivity() {
         return if (this.isNullOrEmpty()) default() else this
     }
 
-
     private fun loadProfilePicture() {
         val userId = auth.currentUser?.uid ?: return
         val avatarImageView = findViewById<ImageView>(R.id.image_avatar)
@@ -140,16 +139,23 @@ class Profile : AppCompatActivity() {
             .addOnSuccessListener { document ->
                 val photoUrl = document.getString("photoUrl")
 
-                Glide.with(this)
-                    .load(photoUrl.ifNullOrEmpty { null })
-                    .placeholder(R.drawable.ic_default_avatar)
-                    .error(R.drawable.ic_default_avatar)
-                    .fallback(R.drawable.ic_default_avatar)
-                    .circleCrop()
-                    .into(avatarImageView)
+                if (!photoUrl.isNullOrEmpty()) {
+                    Glide.with(this)
+                        .load(photoUrl)
+                        .placeholder(R.drawable.ic_default_avatar)
+                        .error(R.drawable.ic_default_avatar)
+                        .fallback(R.drawable.ic_default_avatar)
+                        .circleCrop()
+                        .into(avatarImageView)
+                } else {
+                    avatarImageView.setImageResource(R.drawable.ic_default_avatar)
+                }
+            }
+            .addOnFailureListener {
+                findViewById<ImageView>(R.id.image_avatar)
+                    .setImageResource(R.drawable.ic_default_avatar)
             }
     }
-
 
     private fun setupBottomNavigation() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_menu)
