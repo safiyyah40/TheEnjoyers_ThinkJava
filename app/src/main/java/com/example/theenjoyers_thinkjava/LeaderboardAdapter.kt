@@ -34,14 +34,6 @@ class LeaderboardAdapter(private var rankList: List<LeaderboardEntry>) :
         holder.name.text = entry.name
         holder.score.text = "${entry.score} pts"
 
-        Glide.with(holder.itemView.context)
-            .load(entry.avatarUrl.ifEmpty { null }) // Handle jika URL kosong
-            .placeholder(R.drawable.ic_default_avatar)
-            .error(R.drawable.ic_default_avatar)
-            .fallback(R.drawable.ic_default_avatar)
-            .circleCrop()
-            .into(holder.avatar)
-
         if (entry.isCurrentUser) {
             holder.card.setCardBackgroundColor(
                 ContextCompat.getColor(holder.itemView.context, R.color.light_green_highlight)

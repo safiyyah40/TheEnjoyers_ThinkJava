@@ -23,6 +23,7 @@ class Login : AppCompatActivity() {
     private lateinit var loginButton: Button
     private lateinit var togglePasswordButton: ImageButton
     private lateinit var forgotPasswordButton: Button
+    private lateinit var backButton: Button
 
     private var isPasswordVisible = false
 
@@ -36,6 +37,8 @@ class Login : AppCompatActivity() {
         usernameField = findViewById(R.id.editTextText2)
         passwordField = findViewById(R.id.editTextText3)
         loginButton = findViewById(R.id.button3)
+        backButton = findViewById(R.id.button4)
+        backButton.setOnClickListener { finish() }
         togglePasswordButton = findViewById(R.id.buttonTogglePasswordLogin)
         forgotPasswordButton = findViewById(R.id.button9)
 

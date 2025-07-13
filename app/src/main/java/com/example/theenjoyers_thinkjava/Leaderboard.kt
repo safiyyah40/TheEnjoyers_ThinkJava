@@ -12,13 +12,16 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 
 class Leaderboard : AppCompatActivity() {
+
+    companion object {
+        const val EXTRA_CATEGORY = "EXTRA_CATEGORY"
+    }
 
     private val TAG = "LEADERBOARD_ACTIVITY"
 
@@ -31,6 +34,7 @@ class Leaderboard : AppCompatActivity() {
     private lateinit var db: FirebaseFirestore
     private lateinit var auth: FirebaseAuth
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_leaderboard)
@@ -40,7 +44,7 @@ class Leaderboard : AppCompatActivity() {
 
         leaderboardTitle = findViewById(R.id.tv_leaderboard_title)
         recyclerView = findViewById(R.id.rv_leaderboard)
-        recyclerViewRanks4to10 = findViewById(R.id.rv_leaderboard_4_to_10) // Tambahkan ID ini ke XML Anda
+        recyclerViewRanks4to10 = findViewById(R.id.rv_leaderboard_4_to_10)
         loadingIndicator = findViewById(R.id.leaderboard_loading_indicator)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerViewRanks4to10.layoutManager = LinearLayoutManager(this)
@@ -50,7 +54,15 @@ class Leaderboard : AppCompatActivity() {
         recyclerView.adapter = leaderboardAdapter
         recyclerViewRanks4to10.adapter = leaderboardAdapter4to10
 
-        loadLeaderboardFromFirestore("Variabel")
+        // Logika untuk memuat leaderboard berdasarkan Intent
+        val categoryFromIntent = intent.getStringExtra(EXTRA_CATEGORY)
+        if (categoryFromIntent != null) {
+            // Jika datang dari ScoreActivity, muat kategori spesifik
+            loadLeaderboardFromFirestore(categoryFromIntent)
+        } else {
+            // Jika tidak, muat kategori default ("Variabel")
+            loadLeaderboardFromFirestore("Variabel")
+        }
 
         setupCategoryButtons()
         setupBottomNavigation()
@@ -86,7 +98,6 @@ class Leaderboard : AppCompatActivity() {
                         rank = 0,
                         name = doc.getString("username") ?: "Tanpa Nama",
                         score = (doc.getLong("score") ?: 0).toInt(),
-                        avatarUrl = doc.getString("photoUrl") ?: "",
                         isCurrentUser = (doc.getString("userId") == currentUserId)
                     )
                 }.mapIndexed { index, entry ->
@@ -121,24 +132,21 @@ class Leaderboard : AppCompatActivity() {
             rank1Layout.visibility = View.VISIBLE
             rank1Layout.findViewById<TextView>(R.id.tv_name_rank_1).text = top3List[0].name
             rank1Layout.findViewById<TextView>(R.id.tv_score_rank_1).text = "${top3List[0].score} pts"
-            val avatar1 = rank1Layout.findViewById<ImageView>(R.id.iv_rank_1)
-            Glide.with(this).load(top3List[0].avatarUrl.ifEmpty { null }).placeholder(R.drawable.ic_default_avatar).error(R.drawable.ic_default_avatar).circleCrop().into(avatar1)
+            rank1Layout.findViewById<ImageView>(R.id.iv_rank_1).setImageResource(R.drawable.ic_default_avatar)
         }
 
         if (top3List.size >= 2) {
             rank2Layout.visibility = View.VISIBLE
             rank2Layout.findViewById<TextView>(R.id.tv_name_rank_2).text = top3List[1].name
             rank2Layout.findViewById<TextView>(R.id.tv_score_rank_2).text = "${top3List[1].score} pts"
-            val avatar2 = rank2Layout.findViewById<ImageView>(R.id.iv_rank_2)
-            Glide.with(this).load(top3List[1].avatarUrl.ifEmpty { null }).placeholder(R.drawable.ic_default_avatar).error(R.drawable.ic_default_avatar).circleCrop().into(avatar2)
+            rank2Layout.findViewById<ImageView>(R.id.iv_rank_2).setImageResource(R.drawable.ic_default_avatar)
         }
 
         if (top3List.size >= 3) {
             rank3Layout.visibility = View.VISIBLE
             rank3Layout.findViewById<TextView>(R.id.tv_name_rank_3).text = top3List[2].name
             rank3Layout.findViewById<TextView>(R.id.tv_score_rank_3).text = "${top3List[2].score} pts"
-            val avatar3 = rank3Layout.findViewById<ImageView>(R.id.iv_rank_3)
-            Glide.with(this).load(top3List[2].avatarUrl.ifEmpty { null }).placeholder(R.drawable.ic_default_avatar).error(R.drawable.ic_default_avatar).circleCrop().into(avatar3)
+            rank3Layout.findViewById<ImageView>(R.id.iv_rank_3).setImageResource(R.drawable.ic_default_avatar)
         }
     }
 

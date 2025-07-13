@@ -18,7 +18,7 @@ class RegisterUsername : AppCompatActivity() {
     private lateinit var usernameField: EditText
     private lateinit var emailField: EditText
     private lateinit var nextButton: Button
-    private lateinit var cancelButton: Button
+    private lateinit var backButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,9 +35,9 @@ class RegisterUsername : AppCompatActivity() {
         usernameField = findViewById(R.id.editTextText)
         emailField = findViewById(R.id.editTextText1)
         nextButton = findViewById(R.id.button6)
-        cancelButton = findViewById(R.id.button7)
+        backButton = findViewById(R.id.button7)
 
-        cancelButton.setOnClickListener {
+        backButton.setOnClickListener {
             finish()
         }
 

@@ -16,7 +16,7 @@
         android:orientation="horizontal"
         android:paddingHorizontal="16dp"
         android:paddingVertical="12dp"
-        tools:background="#D4EDDA"> <!-- Warna highlight untuk user -->
+        tools:background="#D4EDDA">
 
         <TextView
             android:id="@+id/tv_rank_number"

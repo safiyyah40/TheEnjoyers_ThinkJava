@@ -13,6 +13,7 @@ class ResetPasswordActivity : AppCompatActivity() {
     private lateinit var newPassword: EditText
     private lateinit var confirmPassword: EditText
     private lateinit var submitButton: Button
+    private lateinit var backButton: Button
     private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,6 +23,9 @@ class ResetPasswordActivity : AppCompatActivity() {
         newPassword = findViewById(R.id.editTextNewPassword)
         confirmPassword = findViewById(R.id.editTextConfirmPassword)
         submitButton = findViewById(R.id.buttonSubmitReset)
+        backButton = findViewById(R.id.btn_back)
+
+        backButton.setOnClickListener { finish() }
         auth = FirebaseAuth.getInstance()
 
         submitButton.setOnClickListener {

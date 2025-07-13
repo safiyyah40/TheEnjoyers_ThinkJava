@@ -210,7 +210,6 @@ class QuestionActivity : AppCompatActivity() {
         resetOptionStyles()
         selectedButton.backgroundTintList = ContextCompat.getColorStateList(this, R.color.selected_button_background)
         selectedButton.setTextColor(Color.BLACK)
-        selectedButton.typeface = Typeface.DEFAULT_BOLD
     }
 
 }

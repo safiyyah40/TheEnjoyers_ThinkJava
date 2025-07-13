@@ -44,7 +44,7 @@
                 android:textColor="@android:color/black"
                 android:textSize="22sp"
                 android:textStyle="bold"
-                tools:text="Leaderboard Variable Java" />
+                tools:text="Peringkat Variable Java" />
 
             <LinearLayout
                 android:id="@+id/leaderboard_type_buttons"

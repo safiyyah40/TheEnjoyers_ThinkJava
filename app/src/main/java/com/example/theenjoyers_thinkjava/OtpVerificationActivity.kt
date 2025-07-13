@@ -13,6 +13,7 @@ class OtpVerificationActivity : AppCompatActivity() {  // <- Tambahkan inheritan
     private lateinit var otpDigit3: EditText
     private lateinit var otpDigit4: EditText
     private lateinit var buttonNext: Button
+    private lateinit var backButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,6 +24,8 @@ class OtpVerificationActivity : AppCompatActivity() {  // <- Tambahkan inheritan
         otpDigit3 = findViewById(R.id.otp_digit_3)
         otpDigit4 = findViewById(R.id.otp_digit_4)
         buttonNext = findViewById(R.id.buttonNextOtp)
+        backButton = findViewById(R.id.btn_back)
+        backButton.setOnClickListener { finish() }
 
         buttonNext.setOnClickListener {
             val otp = otpDigit1.text.toString() +

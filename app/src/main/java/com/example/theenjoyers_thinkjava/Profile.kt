@@ -16,12 +16,6 @@ import com.bumptech.glide.Glide
 import android.widget.ImageView
 
 
-// Data class untuk menampung data skor dari Firestore
-data class QuizScore(
-    val category: String = "",
-    val score: Long = 0,
-    val timestamp: Timestamp? = null
-)
 
 class Profile : AppCompatActivity() {
 

@@ -105,12 +105,12 @@
         android:textColor="@android:color/white"
         android:textSize="16sp"
         app:cornerRadius="24dp"
-        app:layout_constraintBottom_toTopOf="@id/btn_back_to_main_menu"
+        app:layout_constraintBottom_toTopOf="@id/btn_back_to_leaderboard"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_back_to_main_menu"
+        android:id="@+id/btn_back_to_leaderboard"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
@@ -118,7 +118,7 @@
         android:layout_marginBottom="48dp"
         android:backgroundTint="#D9D9D9"
         android:padding="16dp"
-        android:text="Kembali ke Beranda"
+        android:text="Lihat Peringkat"
         android:textColor="@android:color/black"
         android:textSize="16sp"
         app:cornerRadius="24dp"

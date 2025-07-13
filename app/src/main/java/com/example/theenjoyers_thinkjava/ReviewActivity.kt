@@ -96,7 +96,6 @@ class ReviewActivity : AppCompatActivity() {
                 optionsContainer.addView(optionButton)
             }
 
-            // Tambahkan blok soal yang sudah jadi ke container utama
             container.addView(questionView)
         }
     }

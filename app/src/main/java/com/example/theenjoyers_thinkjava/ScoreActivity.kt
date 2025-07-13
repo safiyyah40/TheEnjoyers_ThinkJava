@@ -18,6 +18,9 @@ class ScoreActivity : AppCompatActivity() {
         const val EXTRA_SCORE = "extra_score"
         const val EXTRA_TOTAL_QUESTIONS = "extra_total_questions"
         const val EXTRA_TIME_TAKEN = "extra_time_taken"
+
+        // Kunci untuk mengirim kategori ke LeaderboardActivity
+        const val EXTRA_CATEGORY = "EXTRA_CATEGORY"
     }
 
     private lateinit var auth: FirebaseAuth
@@ -66,12 +69,11 @@ class ScoreActivity : AppCompatActivity() {
     private fun saveScoresToDatabase(category: String, score: Int) {
         val userId = auth.currentUser?.uid ?: return
 
-        // Ambil data profil pengguna (username & foto) terlebih dahulu
+        // Ambil data username pengguna terlebih dahulu
         db.collection("users").document(userId).get().addOnSuccessListener { userDocument ->
             val username = userDocument.getString("username") ?: "Anonymous"
-            val photoUrl = userDocument.getString("photoUrl") ?: ""
 
-            // 1. Simpan ke riwayat skor di profil pengguna
+            // Simpan ke riwayat skor di profil pengguna
             val profileScoreData = hashMapOf(
                 "category" to category,
                 "score" to score,
@@ -80,19 +82,16 @@ class ScoreActivity : AppCompatActivity() {
             db.collection("users").document(userId).collection("scores").add(profileScoreData)
                 .addOnSuccessListener { Log.d("Firestore", "Skor berhasil disimpan ke profil.") }
 
-            // 2. Simpan atau perbarui skor di koleksi leaderboard global
-            // Dokumen ID unik memastikan setiap pengguna hanya punya 1 entri per kategori
+            // Simpan atau perbarui skor di koleksi leaderboard global
             val leaderboardDocId = "${userId}_${category}"
             val leaderboardData = hashMapOf(
                 "userId" to userId,
                 "username" to username,
-                "photoUrl" to photoUrl,
                 "category" to category,
                 "score" to score,
                 "timestamp" to FieldValue.serverTimestamp()
             )
 
-            // Gunakan .set() untuk membuat atau menimpa entri yang ada
             db.collection("leaderboard").document(leaderboardDocId).set(leaderboardData)
                 .addOnSuccessListener { Log.d("Firestore", "Skor berhasil disimpan ke leaderboard.") }
 
@@ -106,9 +105,13 @@ class ScoreActivity : AppCompatActivity() {
         val userAnswersForReview = intent.getSerializableExtra(ReviewActivity.EXTRA_USER_ANSWERS)
         val categoryName = intent.getStringExtra(ReviewActivity.EXTRA_CATEGORY_NAME)
 
-        findViewById<Button>(R.id.btn_back_to_main_menu).setOnClickListener {
-            val intent = Intent(this, Dashboard::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        findViewById<Button>(R.id.btn_back_to_leaderboard).setOnClickListener {
+            val intent = Intent(this, Leaderboard::class.java).apply {
+                // MODIFIKASI: Kirim nama kategori ke LeaderboardActivity
+                // agar bisa langsung menampilkan leaderboard yang sesuai.
+                putExtra(EXTRA_CATEGORY, categoryName)
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
             startActivity(intent)
             finish()
         }
