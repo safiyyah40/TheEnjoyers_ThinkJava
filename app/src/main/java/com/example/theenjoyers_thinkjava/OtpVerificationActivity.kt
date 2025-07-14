@@ -5,9 +5,9 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity  // <- Penting!
+import androidx.appcompat.app.AppCompatActivity
 
-class OtpVerificationActivity : AppCompatActivity() {  // <- Tambahkan inheritance ke AppCompatActivity
+class OtpVerificationActivity : AppCompatActivity() {
     private lateinit var otpDigit1: EditText
     private lateinit var otpDigit2: EditText
     private lateinit var otpDigit3: EditText
@@ -17,7 +17,7 @@ class OtpVerificationActivity : AppCompatActivity() {  // <- Tambahkan inheritan
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_otp_verification)  // <- Pastikan nama XML layout sesuai
+        setContentView(R.layout.activity_otp_verification)
 
         otpDigit1 = findViewById(R.id.otp_digit_1)
         otpDigit2 = findViewById(R.id.otp_digit_2)

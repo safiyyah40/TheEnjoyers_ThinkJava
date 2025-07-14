@@ -15,11 +15,8 @@ import com.google.firebase.Timestamp
 import com.bumptech.glide.Glide
 import android.widget.ImageView
 
-
-
 class Profile : AppCompatActivity() {
 
-    // Tambahkan properti untuk Firebase
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
 
@@ -27,21 +24,21 @@ class Profile : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
 
-        // Inisialisasi Firebase
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
         setupBottomNavigation()
         setupEditProfileButton()
         setupLogoutButton()
+    }
+
+    override fun onResume() {
+        super.onResume()
         showUsername()
         loadProfilePicture()
-
-        // Panggil fungsi untuk memuat statistik skor
         loadScoreStats()
     }
 
-    // Ambil username dari SharedPreferences
     private fun showUsername() {
         val sharedPref = getSharedPreferences("user_prefs", MODE_PRIVATE)
         val username = sharedPref.getString("username", "Pengguna") ?: "Pengguna"
@@ -49,15 +46,12 @@ class Profile : AppCompatActivity() {
         usernameTextView.text = username
     }
 
-    /**
-     * Fungsi baru untuk mengambil semua skor dari Firestore dan menampilkannya.
-     */
     private fun loadScoreStats() {
         val userId = auth.currentUser?.uid ?: return
 
         db.collection("users").document(userId)
             .collection("scores")
-            .orderBy("timestamp", Query.Direction.DESCENDING) // Urutkan dari yang terbaru
+            .orderBy("timestamp", Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { documents ->
                 if (documents.isEmpty) {
@@ -65,13 +59,9 @@ class Profile : AppCompatActivity() {
                     return@addOnSuccessListener
                 }
 
-                // Ubah dokumen firestore menjadi list dari data class QuizScore
                 val allScores = documents.toObjects(QuizScore::class.java)
-
-                // Kelompokkan skor berdasarkan kategori
                 val scoresByCategory = allScores.groupBy { it.category }
 
-                // Update UI untuk setiap kategori
                 updateScoreCardUI("Variabel", scoresByCategory["Variabel"])
                 updateScoreCardUI("Inheritance", scoresByCategory["Inheritance"])
                 updateScoreCardUI("Array", scoresByCategory["Array"])
@@ -82,9 +72,6 @@ class Profile : AppCompatActivity() {
             }
     }
 
-    /**
-     * Fungsi baru untuk mengupdate satu kartu skor di UI.
-     */
     private fun updateScoreCardUI(category: String, scores: List<QuizScore>?) {
         val cardViewId = when (category) {
             "Variabel" -> R.id.score_variable_layout
@@ -109,20 +96,14 @@ class Profile : AppCompatActivity() {
             terbaru.text = "Nilai Terbaru: -"
             terendah.text = "Nilai Terendah: -"
         } else {
-            // Hitung statistik
             val maxScore = scores.maxOfOrNull { it.score } ?: 0
             val minScore = scores.minOfOrNull { it.score } ?: 0
-            val latestScore = scores.first().score // List sudah diurutkan dari terbaru
+            val latestScore = scores.first().score
 
-            // Tampilkan di UI
             tertinggi.text = "Nilai Tertinggi: $maxScore"
             terbaru.text = "Nilai Terbaru: $latestScore"
             terendah.text = "Nilai Terendah: $minScore"
         }
-    }
-
-    fun String?.ifNullOrEmpty(default: () -> String?): String? {
-        return if (this.isNullOrEmpty()) default() else this
     }
 
     private fun loadProfilePicture() {

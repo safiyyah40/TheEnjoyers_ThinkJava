@@ -32,7 +32,6 @@ class EditProfile : AppCompatActivity() {
             return
         }
 
-        // Initialize views
         editTextNamaLengkap = findViewById(R.id.editTextNamaLengkap)
         editTextUsername = findViewById(R.id.editTextUsername)
         editTextEmail = findViewById(R.id.editTextEmail)
@@ -43,7 +42,6 @@ class EditProfile : AppCompatActivity() {
 
         val userId = currentUser.uid
 
-        // Fetch data from Firestore
         db.collection("users").document(userId).get()
             .addOnSuccessListener { document ->
                 if (document.exists()) {
@@ -54,7 +52,6 @@ class EditProfile : AppCompatActivity() {
                 }
             }
 
-        // Save Button click listener
         btnSimpan.setOnClickListener {
             val namaLengkap = editTextNamaLengkap.text.toString().trim()
             val username = editTextUsername.text.toString().trim()
@@ -81,6 +78,13 @@ class EditProfile : AppCompatActivity() {
         db.collection("users").document(userId)
             .set(userData, SetOptions.merge())
             .addOnSuccessListener {
+                val newUsername = userData["username"] as? String ?: ""
+
+                if (newUsername.isNotEmpty()) {
+                    val sharedPref = getSharedPreferences("user_prefs", MODE_PRIVATE)
+                    sharedPref.edit().putString("username", newUsername).apply()
+                }
+
                 Toast.makeText(this, "Profil berhasil diperbarui", Toast.LENGTH_SHORT).show()
                 finish()
             }
